@@ -32,7 +32,7 @@ public class RateListController {
 	}
 
 	@RequestMapping("/getAllRateList")
-	public ResponseEntity<?> getAllRateList(@RequestBody Ratelist rateList) {
+	public ResponseEntity<?> getAllRateList() {
 		try {
 			List<Ratelist> r = rateListService.getAllRatelist();
 			return new ResponseEntity<>(r, HttpStatus.OK);
