@@ -15,6 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class Holiday {
 	
@@ -24,6 +28,7 @@ public class Holiday {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date holidayDate;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })

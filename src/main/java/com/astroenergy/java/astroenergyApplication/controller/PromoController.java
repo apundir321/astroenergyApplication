@@ -1,5 +1,7 @@
 package com.astroenergy.java.astroenergyApplication.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,17 @@ public ResponseEntity<?> deletePromo(@RequestBody PromoCode promo) {
 	try {
       PromoCode p = promoService.deletePromo(promo);
 	 return new ResponseEntity<PromoCode>(p, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+
+@RequestMapping("/getPromo")
+public ResponseEntity<?> getPromo() {
+	try {
+      List<PromoCode> p = promoService.getPromos();
+	 return new ResponseEntity<List<PromoCode>>(p, HttpStatus.OK);
 	}catch (Exception e) {
 		// TODO: handle exception
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
