@@ -1,5 +1,7 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ public class PromoService {
 	public PromoCode editPromo(PromoCode promo)throws Exception
 	{
 		try {
-			promo.setStatus("DELETED");
+			
 			PromoCode p = promoRepo.save(promo);
 			 return p;
 			}catch (Exception e) {
@@ -37,8 +39,20 @@ public class PromoService {
 	public PromoCode deletePromo(PromoCode promo)throws Exception
 	{
 		try {
+			promo.setStatus("DELETED");
 			PromoCode p = promoRepo.save(promo);
 			 return p;
+			}catch (Exception e) {
+				// TODO: handle exception
+				throw e;
+			}
+	}
+	
+	public List<PromoCode> getPromos()throws Exception
+	{
+		try {
+			return promoRepo.findAll();
+			 
 			}catch (Exception e) {
 				// TODO: handle exception
 				throw e;

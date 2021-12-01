@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class PromoCode {
 	@Id
@@ -15,7 +17,9 @@ public class PromoCode {
 	private String code;
 	private String type;
 	private String amount;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date effectiveDate;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date expiryDate;
 	private String remarks;
 	private String status;
