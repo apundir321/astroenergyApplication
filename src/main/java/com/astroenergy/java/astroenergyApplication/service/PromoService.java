@@ -58,4 +58,15 @@ public class PromoService {
 				throw e;
 			}
 	}
+	
+	public PromoCode getPromoDetail(int id)throws Exception
+	{
+		try {
+			return promoRepo.findById(id).get();
+			 
+			}catch (Exception e) {
+				// TODO: handle exception
+				throw e;
+			}
+	}
 }

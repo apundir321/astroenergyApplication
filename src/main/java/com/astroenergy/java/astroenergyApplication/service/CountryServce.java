@@ -59,5 +59,16 @@ public class CountryServce {
 				throw e;
 			}
 	}
+	
+	public Country getCountryDetail(int id)throws Exception
+	{
+		try {
+			
+			 return countryRepo.findById(id).get();
+			}catch (Exception e) {
+				// TODO: handle exception
+				throw e;
+			}
+	}
 
 }

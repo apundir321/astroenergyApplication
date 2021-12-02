@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.astroenergy.java.astroenergyApplication.model.Country;
@@ -43,10 +44,22 @@ public class EnquiryController {
 	}
 	
 	
-@RequestMapping("/getEnquiry")
-public ResponseEntity<?> getEnquiry(@RequestBody SearchEnquiry enquiry) {
+	@RequestMapping("/editEnquiry")
+	public ResponseEntity<?> editEnquiry(@RequestBody Enquiry enquiry) {
+		try {
+		Enquiry e = enquiryService.addEnquiry(enquiry);
+		 return new ResponseEntity<Enquiry>(e, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+@RequestMapping("/getEnquiryDetail")
+public ResponseEntity<?> getEnquiry(@RequestParam int id) {
 	try {
-	List<Enquiry> e= enquiryService.getEnquiry(enquiry);
+	Enquiry e= enquiryService.getEnquiryDetail(id);
 	 return new ResponseEntity<>(e, HttpStatus.OK);
 	}catch (Exception e) {
 		// TODO: handle exception

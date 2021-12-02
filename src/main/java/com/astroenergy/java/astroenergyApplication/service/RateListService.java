@@ -37,6 +37,17 @@ public List<Ratelist> getAllRatelist()throws Exception
 			throw e;
 		}
 }
+
+public Ratelist getRateListDetail(int id)throws Exception
+{
+	try {
+		return  rateListRepo.findById(id).get();
+		
+		}catch (Exception e) {
+			// TODO: handle exception
+			throw e;
+		}
+}
 public Ratelist editRatelist(Ratelist rateList)throws Exception
 {
 	try {

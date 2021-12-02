@@ -1,5 +1,6 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.astroenergy.java.astroenergyApplication.dao.HolidayRepo;
+import com.astroenergy.java.astroenergyApplication.dao.TimeSlotRepo;
 import com.astroenergy.java.astroenergyApplication.model.Day;
 import com.astroenergy.java.astroenergyApplication.model.Holiday;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
@@ -17,9 +19,12 @@ public class HolidayService {
 	
 	@Autowired
 	private HolidayRepo holidayRepo;
+	
+	private TimeSlotRepo timeSlotRepo;
 
 	public Holiday saveHoliday(Holiday holiday) throws Exception {
 		try {
+			
 			return holidayRepo.save(holiday);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -76,7 +81,13 @@ public class HolidayService {
 			if(holiday.isPresent())
 			{
 				Holiday savedHoliday =  holiday.get();
-				savedHoliday.setTimeSlots(timeSlots);
+				Set<TimeSlot> savedTimeSlots = new HashSet<>();
+				for(TimeSlot t : savedTimeSlots)
+				{
+					TimeSlot savedTimeSlot = timeSlotRepo.findById(t.getId()).get();
+					savedTimeSlots.add(savedTimeSlot);
+				}
+				savedHoliday.setTimeSlots(savedTimeSlots);
 				return holidayRepo.save(savedHoliday);
 			}else
 			{

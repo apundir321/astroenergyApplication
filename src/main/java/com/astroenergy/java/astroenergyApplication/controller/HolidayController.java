@@ -74,7 +74,7 @@ public class HolidayController {
 			return new ResponseEntity<Holiday>(holiday, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception
-			return new ResponseEntity<String>("Error in getting holidays", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 			
 		}
 		

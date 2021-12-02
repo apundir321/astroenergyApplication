@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.astroenergy.java.astroenergyApplication.dao.CountryRepo;
@@ -39,6 +40,17 @@ public ResponseEntity<?> addCountry(@RequestBody Country country) {
 public ResponseEntity<?> allCountry() {
 	try {
 	List<Country> c= countryService.getAll();
+	 return new ResponseEntity<>(c, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+
+@GetMapping("/getCountryDetail")
+public ResponseEntity<?> allCountry(@RequestParam int id) {
+	try {
+	Country c= countryService.getCountryDetail(id);
 	 return new ResponseEntity<>(c, HttpStatus.OK);
 	}catch (Exception e) {
 		// TODO: handle exception

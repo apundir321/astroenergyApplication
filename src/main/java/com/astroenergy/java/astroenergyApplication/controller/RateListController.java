@@ -70,4 +70,21 @@ public class RateListController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@RequestMapping("/getRateListDetail")
+	public ResponseEntity<?> getRateListDetail(@RequestBody int id) {
+		try {
+			// Ratelist r = rateListRepo.getById(rateList.getSno());
+			// r.setCountryName(rateList.getCountryName());
+			// r.setConsultationType(rateList.getConsultationType());
+			// r.setRateOfValues(rateList.getRateOfValues());
+			// r.setStatus(rateList.getStatus());
+			Ratelist rt = rateListService.getRateListDetail(id);
+
+			return new ResponseEntity<>(rt, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

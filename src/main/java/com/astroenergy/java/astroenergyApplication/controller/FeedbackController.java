@@ -30,6 +30,18 @@ public ResponseEntity<?> addFeedback(@RequestBody Feedback feedback) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
+
+@RequestMapping("/editFeedBack")
+public ResponseEntity<?> editFeedBack(@RequestBody Feedback feedback) {
+	try {
+	Feedback f = feedbackService.addFeedback(feedback);
+	 return new ResponseEntity<Feedback>(f, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+
 @RequestMapping("/getAllFeedback")
 public ResponseEntity<?> allFeedback() {
 	try {
@@ -45,6 +57,17 @@ public ResponseEntity<?> allFeedback() {
 public ResponseEntity<?> getFeedback(@RequestParam String name ) {
 	try {
 	List<Feedback> f= feedbackService.getFeedback(name);
+	 return new ResponseEntity<>(f, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+
+@RequestMapping("/getFeedbackDetail")
+public ResponseEntity<?> getFeedback(@RequestParam int id ) {
+	try {
+	Feedback f= feedbackService.getFeedbackDetail(id);
 	 return new ResponseEntity<>(f, HttpStatus.OK);
 	}catch (Exception e) {
 		// TODO: handle exception

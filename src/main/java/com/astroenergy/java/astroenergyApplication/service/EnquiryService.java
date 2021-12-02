@@ -49,6 +49,16 @@ public Enquiry addEnquiry(Enquiry enquiry) {
 	}
 }
 
+public Enquiry getEnquiryDetail(int id) {
+	try {
+		Enquiry e=enquiryRepo.findById(id).get();
+		return e;
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
+
 public Enquiry searchByName(String name) {
 	try {
 		Enquiry e=enquiryRepo.findByName(name);

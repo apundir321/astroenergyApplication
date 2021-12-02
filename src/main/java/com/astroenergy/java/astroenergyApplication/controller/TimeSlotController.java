@@ -73,6 +73,31 @@ public class TimeSlotController {
 		}	
 	}
 	
+	@GetMapping("/getDays")
+	public ResponseEntity<?> getDays()
+	{
+		try {
+			List<Day> slots = slotService.getDays();
+			return new ResponseEntity<List<Day>>(slots, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>("Error in getting days", HttpStatus.INTERNAL_SERVER_ERROR);	
+		}	
+	}
+	
+	@GetMapping("/getTimeSlotDetail")
+	public ResponseEntity<?> getTimeSlotDetail(@RequestParam long id)
+	{
+		try {
+			TimeSlot slot = slotService.getTimeSlotDetail(id);
+			return new ResponseEntity<TimeSlot>(slot, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>("Error in getting time slot", HttpStatus.INTERNAL_SERVER_ERROR);	
+		}	
+	}
+	
+	
 	
 
 }
