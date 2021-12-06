@@ -20,7 +20,7 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 	
-	private Date AppointDate;
+	private Date appointDate;
 	
 	@OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "timeslot_id")
@@ -60,13 +60,7 @@ public class Appointment {
 		this.id = id;
 	}
 
-	public Date getAppointDate() {
-		return AppointDate;
-	}
 
-	public void setAppointDate(Date appointDate) {
-		AppointDate = appointDate;
-	}
 
 	public TimeSlot getTimeSlot() {
 		return timeSlot;
@@ -146,6 +140,14 @@ public class Appointment {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Date getAppointDate() {
+		return appointDate;
+	}
+
+	public void setAppointDate(Date appointDate) {
+		this.appointDate = appointDate;
 	}
 	
 	
