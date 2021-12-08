@@ -87,7 +87,7 @@ public class AppointmentService {
 		}
 	}
 	
-	public Appointment getAppointMentDetail(int id)throws Exception
+	public Appointment getAppointMentDetail(long id)throws Exception
 	{
 		try {
 			return appointMentRepo.findById(id).get();

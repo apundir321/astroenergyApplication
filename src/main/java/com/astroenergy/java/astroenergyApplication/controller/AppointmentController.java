@@ -59,7 +59,7 @@ public class AppointmentController {
 	}
 	
 	@GetMapping("/getAppointmentDetail")
-	public ResponseEntity<?> getAppointmentDetail(@RequestParam int id) {
+	public ResponseEntity<?> getAppointmentDetail(@RequestParam long id) {
 		try {
 			Appointment c= appointmentService.getAppointMentDetail(id);
 			 return new ResponseEntity<>(c, HttpStatus.OK);

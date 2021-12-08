@@ -9,7 +9,7 @@ import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.UserProfile;
 
 @Repository
-public interface AppointMentRepo   extends CrudRepository<Appointment, Integer> {
+public interface AppointMentRepo   extends CrudRepository<Appointment, Long> {
 	
 	public List<Appointment> findByStatus(String status);
 
