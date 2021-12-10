@@ -23,7 +23,7 @@ public class UserProfile {
 	private String phone;
 	private String profilePicName;
 	private String placeOfBirth;
-	
+	private String status;
 	private Date dob;
 	
 	private LocalDateTime timeOfBirth;
@@ -35,6 +35,13 @@ public class UserProfile {
 	public UserProfile() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public void setId(int id) {
 		this.id = id;

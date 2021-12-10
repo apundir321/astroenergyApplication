@@ -52,6 +52,27 @@ public class AppointmentService {
 			throw e;
 		}
 	}
+	public Optional<Appointment> updateAppointmentStatus(Long id,String status ) throws Exception{
+		try {
+		Optional<Appointment> ap=appointMentRepo.findById(id);
+              if(ap.isPresent())
+              {
+            	  Appointment a = ap.get();
+            	  a.setStatus(status);
+            	  appointMentRepo.save(a);
+            	  
+              }
+              
+              else
+              {
+            	  throw new Exception("appointment not found with this id");
+              }
+              return ap;
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 	
 	public Appointment addAppointment(Appointment appointment,int userProfileId)throws Exception
 	{
