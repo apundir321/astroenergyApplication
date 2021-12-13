@@ -33,7 +33,7 @@ public class User {
     private String lastName;
 
     private String email;
-    
+    private String countryCode;
     private String phoneNo;
 
     @JsonIgnore
@@ -192,6 +192,14 @@ public class User {
 
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 
 }

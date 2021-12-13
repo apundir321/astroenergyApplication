@@ -19,6 +19,8 @@ public class UserDto {
 
     @ValidPassword
     private String password;
+    
+    private String countryCode;
 
     @NotNull
     @Size(min = 1)
@@ -104,5 +106,13 @@ public class UserDto {
                 .append(role).append("]");
         return builder.toString();
     }
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
 
 }
