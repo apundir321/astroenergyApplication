@@ -84,9 +84,11 @@ public class AppointmentService {
 			Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
 			if(userProfileOptional.isPresent()) {
 				appointment.setUserProfile(userProfileOptional.get());
+				if(appointment.getTimeSlot()!=null)
+				{
 				TimeSlot timeSlot = timeSlotRepo.findById(appointment.getTimeSlot().getId()).get();
-				
 				appointment.setTimeSlot(timeSlot);
+				}
 				return appointMentRepo.save(appointment);
 				
 			}else
