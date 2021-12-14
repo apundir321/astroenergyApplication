@@ -18,18 +18,21 @@ import org.springframework.stereotype.Service;
 import com.astroenergy.java.astroenergyApplication.dao.AppointMentRepo;
 import com.astroenergy.java.astroenergyApplication.dao.TimeSlotRepo;
 import com.astroenergy.java.astroenergyApplication.dao.UserProfileRepository;
+import com.astroenergy.java.astroenergyApplication.dao.UserRepository;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Enquiry;
 import com.astroenergy.java.astroenergyApplication.model.SearchAppointment;
 import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
+import com.astroenergy.java.astroenergyApplication.model.User;
 import com.astroenergy.java.astroenergyApplication.model.UserProfile;
 
 
 @Service
 public class AppointmentService {
 	
-	
+	@Autowired
+	UserRepository userRepo;
 	@Autowired
 	AppointMentRepo appointMentRepo;
 	
@@ -153,6 +156,21 @@ public class AppointmentService {
 		    cq.where(predicates.toArray(new Predicate[0]));
 
 		    return em.createQuery(cq).getResultList();
+	}
+	public List<Appointment> getUserAppointments(Long userId){
+		try {
+		User user=userRepo.findById(userId).get();
+		UserProfile userProfile=user.getUserProfile();
+		int profileId=userProfile.getId();
+		List<Appointment> appointments=appointMentRepo.findByUserProfileId(profileId);
+		return appointments;
+		
+		}
+		catch(Exception e) {
+		throw e;	
+		}
+		
+		
 	}
 
 }

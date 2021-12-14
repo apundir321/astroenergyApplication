@@ -104,5 +104,15 @@ public class AppointmentController {
 	}
 
 
-
+	@GetMapping("/getUserAppointments")
+	public ResponseEntity<?> getUserAppointments(@RequestParam long id) {
+		try {
+			List<Appointment> a= appointmentService.getUserAppointments(id);
+			 return new ResponseEntity<>(a, HttpStatus.OK);
+		
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
