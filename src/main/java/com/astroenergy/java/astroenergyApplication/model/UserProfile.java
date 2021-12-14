@@ -26,7 +26,7 @@ public class UserProfile {
 	private String status;
 	private Date dob;
 	
-	private LocalDateTime timeOfBirth;
+	private String timeOfBirth;
 	private String country;
 	private String gender;
 	public int getId() {
@@ -94,12 +94,7 @@ public class UserProfile {
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
-	public LocalDateTime getTimeOfBirth() {
-		return timeOfBirth;
-	}
-	public void setTimeOfBirth(LocalDateTime timeOfBirth) {
-		this.timeOfBirth = timeOfBirth;
-	}
+
 	public String getCountry() {
 		return country;
 	}
@@ -111,6 +106,12 @@ public class UserProfile {
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+	public String getTimeOfBirth() {
+		return timeOfBirth;
+	}
+	public void setTimeOfBirth(String timeOfBirth) {
+		this.timeOfBirth = timeOfBirth;
 	}
 	
 	
