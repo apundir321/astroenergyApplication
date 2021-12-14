@@ -16,11 +16,13 @@ import org.springframework.stereotype.Service;
 
 
 import com.astroenergy.java.astroenergyApplication.dao.AppointMentRepo;
+import com.astroenergy.java.astroenergyApplication.dao.PromoRepo;
 import com.astroenergy.java.astroenergyApplication.dao.TimeSlotRepo;
 import com.astroenergy.java.astroenergyApplication.dao.UserProfileRepository;
 import com.astroenergy.java.astroenergyApplication.dao.UserRepository;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Enquiry;
+import com.astroenergy.java.astroenergyApplication.model.PromoCode;
 import com.astroenergy.java.astroenergyApplication.model.SearchAppointment;
 import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
@@ -30,7 +32,8 @@ import com.astroenergy.java.astroenergyApplication.model.UserProfile;
 
 @Service
 public class AppointmentService {
-	
+	@Autowired
+	PromoRepo promoRepo;
 	@Autowired
 	UserRepository userRepo;
 	@Autowired
@@ -170,6 +173,35 @@ public class AppointmentService {
 		throw e;	
 		}
 		
+		
+	}
+	public Appointment applyPromoCode(Long appointmentId,int promoId) {
+		try{Appointment appointment=appointMentRepo.findById(appointmentId).get();
+		PromoCode promo= promoRepo.findById(promoId).get();
+		
+		if(promo.getType()=="Percentage") {
+			int percent=Integer.parseInt(promo.getAmount());
+			int  amount=Integer.parseInt(appointment.getAmount());
+			float reduce= amount*(percent/100);
+			float actual=amount-reduce;
+		    appointment.setAmount(String.valueOf(actual));
+		return    appointMentRepo.save(appointment);
+			
+		}
+		else {
+			int  amount=Integer.parseInt(appointment.getAmount());
+			int reduce=Integer.parseInt(promo.getAmount());
+			int actual=amount-reduce;
+			appointment.setAmount(String.valueOf(actual));
+			return appointMentRepo.save(appointment);
+			
+			
+		}
+		
+		}
+		catch(Exception e) {
+			throw e;
+		}
 		
 	}
 

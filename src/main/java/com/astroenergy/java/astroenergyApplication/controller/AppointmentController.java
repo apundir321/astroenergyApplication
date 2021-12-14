@@ -115,4 +115,14 @@ public class AppointmentController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@PostMapping("/ApplyPromo")
+	public ResponseEntity<?> applyPromo(@RequestParam Long appointmentId,@RequestParam int promoId) {
+		try {
+		Appointment savedAppointment= appointmentService.applyPromoCode(appointmentId, promoId);
+		 return new ResponseEntity<>(savedAppointment, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
