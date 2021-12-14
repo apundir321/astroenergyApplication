@@ -41,6 +41,8 @@ public class Appointment {
 	
 	private Date dob;
 	
+	private String timeOfBirth;
+	
 	private String gender;
 	
 	private String consultationType;
@@ -208,6 +210,14 @@ public class Appointment {
 
 	public void setAppointDate(Date appointDate) {
 		this.appointDate = appointDate;
+	}
+
+	public String getTimeOfBirth() {
+		return timeOfBirth;
+	}
+
+	public void setTimeOfBirth(String timeOfBirth) {
+		this.timeOfBirth = timeOfBirth;
 	}
 	
 	
