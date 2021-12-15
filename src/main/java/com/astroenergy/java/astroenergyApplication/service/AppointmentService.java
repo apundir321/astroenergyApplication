@@ -182,9 +182,9 @@ public class AppointmentService {
 		try{Appointment appointment=appointMentRepo.findById(appointmentId).get();
 		PromoCode promo= promoRepo.findById(promoId).get();
 		
-		if(promo.getType()=="Percentage") {
-			int percent=Integer.parseInt(promo.getAmount());
-			int  amount=Integer.parseInt(appointment.getAmount());
+		if(promo.getType().equals("Percentage")) {
+			float percent=Float.parseFloat(promo.getAmount());
+		    float amount=Float.parseFloat(appointment.getAmount());
 			float reduce= amount*(percent/100);
 			float actual=amount-reduce;
 		    appointment.setAmount(String.valueOf(actual));
@@ -192,9 +192,9 @@ public class AppointmentService {
 			
 		}
 		else {
-			int  amount=Integer.parseInt(appointment.getAmount());
-			int reduce=Integer.parseInt(promo.getAmount());
-			int actual=amount-reduce;
+			float  amount=Float.parseFloat(appointment.getAmount());
+			float reduce=Float.parseFloat(promo.getAmount());
+			float actual=amount-reduce;
 			appointment.setAmount(String.valueOf(actual));
 			return appointMentRepo.save(appointment);
 			

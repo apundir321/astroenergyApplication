@@ -115,7 +115,7 @@ public class AppointmentController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@PostMapping("/ApplyPromo")
+	@GetMapping("/ApplyPromo")
 	public ResponseEntity<?> applyPromo(@RequestParam Long appointmentId,@RequestParam int promoId) {
 		try {
 		Appointment savedAppointment= appointmentService.applyPromoCode(appointmentId, promoId);
