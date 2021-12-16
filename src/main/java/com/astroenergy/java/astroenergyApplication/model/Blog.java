@@ -2,10 +2,17 @@ package com.astroenergy.java.astroenergyApplication.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Blog {
@@ -15,9 +22,14 @@ public class Blog {
 	private String title;
 	private String subtitle;
 	private String image;
+	@Lob
 	private String content;
 	private String status;
+	@CreationTimestamp
+	@Temporal(value=TemporalType.DATE)
 	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.DATE)
 	private Date updatedAt;
 	public Long getId() {
 		return id;
