@@ -125,4 +125,16 @@ public class AppointmentController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("/addRemedyAppointment")
+	public ResponseEntity<?> addRemedyAppointment(@RequestParam Long id,@RequestParam String remedy) {
+		try {
+			Appointment a= appointmentService.addRemedyAppointment(id,remedy);
+			 return new ResponseEntity<>(a, HttpStatus.OK);
+		
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

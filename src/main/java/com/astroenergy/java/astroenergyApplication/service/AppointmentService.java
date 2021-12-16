@@ -207,5 +207,15 @@ public class AppointmentService {
 		}
 		
 	}
+	public Appointment addRemedyAppointment(Long id,String remedy) {
+		try {
+			Appointment a=appointMentRepo.findById(id).get();
+			a.setRemedy(remedy);
+			return appointMentRepo.save(a);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 
 }

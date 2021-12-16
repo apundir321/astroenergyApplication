@@ -1,5 +1,8 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -109,4 +112,15 @@ public class TimeSlotService {
 		return (List<Day>) dayRepo.findAll();
 	}
 
+	public List<TimeSlot> getSlotsByDay(Date date){
+		try {
+			String dayWeek = new SimpleDateFormat("EEEE").format(date);
+			List<TimeSlot> t=timeSlotRepo.findByDay(dayWeek);
+			return t;
+			
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 }

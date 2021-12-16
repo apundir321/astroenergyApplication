@@ -60,10 +60,19 @@ public class Appointment {
 	private String phoneNumber;
 	
 	private String status;
+	private String remedy;
 	
 	public Appointment() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getRemedy() {
+		return remedy;
+	}
+
+	public void setRemedy(String remedy) {
+		this.remedy = remedy;
 	}
 
 	public Long getId() {

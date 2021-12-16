@@ -1,9 +1,11 @@
 package com.astroenergy.java.astroenergyApplication.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,7 +99,17 @@ public class TimeSlotController {
 		}	
 	}
 	
-	
+	@GetMapping("/getTimeSlotByDay")
+	public ResponseEntity<?> getSlotstByDay(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd")Date date)
+	{
+		try {
+			List<TimeSlot> slot = slotService.getSlotsByDay(date);
+			return new ResponseEntity<>(slot, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>("Error in getting time slot", HttpStatus.INTERNAL_SERVER_ERROR);	
+		}	
+	}
 	
 
 }
