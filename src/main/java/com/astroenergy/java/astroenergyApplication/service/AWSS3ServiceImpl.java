@@ -133,6 +133,35 @@ public class AWSS3ServiceImpl implements AWSS3Service {
 		
 		return null;
 	}
+	public ByteArrayOutputStream downloadFile(String keyName,Long id) {
+		try {
+            S3Object s3object = amazonS3.getObject(new GetObjectRequest(bucketName,id+"/"+id+"_"+ keyName));
+            
+            InputStream is = s3object.getObjectContent();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int len;
+            byte[] buffer = new byte[4096];
+            while ((len = is.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            return baos;
+		} catch (IOException ioe) {
+			System.out.println("IOException: " + ioe.getMessage());
+        } catch (AmazonServiceException ase) {
+        	System.out.println("sCaught an AmazonServiceException from GET requests, rejected reasons:");
+        	System.out.println("Error Message:    " + ase.getMessage());
+        	System.out.println("HTTP Status Code: " + ase.getStatusCode());
+        	System.out.println("AWS Error Code:   " + ase.getErrorCode());
+        	System.out.println("Error Type:       " + ase.getErrorType());
+			
+			throw ase;
+        } catch (AmazonClientException ace) {
+        	
+            throw ace;
+        }
+		
+		return null;
+	}
 	
 	@Override
 	public ByteArrayOutputStream downloadFile(String keyName) {

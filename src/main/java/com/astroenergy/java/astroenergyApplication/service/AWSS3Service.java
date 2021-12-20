@@ -15,6 +15,6 @@ public interface AWSS3Service {
 	public ByteArrayOutputStream downloadFile(String keyName,UserProfile profile);
 	
 	public ByteArrayOutputStream downloadFile(String keyName);
-	
+	public ByteArrayOutputStream downloadFile(String keyName,Long id);
 	
 }
