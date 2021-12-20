@@ -3,9 +3,13 @@ package com.astroenergy.java.astroenergyApplication.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +21,30 @@ import org.springframework.web.bind.annotation.RestController;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Country;
 import com.astroenergy.java.astroenergyApplication.model.SearchAppointment;
+import com.astroenergy.java.astroenergyApplication.model.User;
+import com.astroenergy.java.astroenergyApplication.registration.OnRegistrationCompleteEvent;
+import com.astroenergy.java.astroenergyApplication.security.UserService;
 import com.astroenergy.java.astroenergyApplication.service.AppointmentService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @RestController
 public class AppointmentController {
-	
+	@Autowired
+	UserService userService;
+	@Autowired
+    private ApplicationEventPublisher eventPublisher;
 	@Autowired
 	AppointmentService appointmentService;
+	@DeleteMapping("/deleteAppointment/{id}")
+	public ResponseEntity<?> deleteAppoinment(@PathVariable Long id) {
+		try {
+		Appointment a= appointmentService.deleteAppointment(id);
+		 return new ResponseEntity<>(a, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/allAppointments")
 	public ResponseEntity<?> allAppointments() {
@@ -36,18 +57,36 @@ public class AppointmentController {
 		}
 	}
 	
-	
+	 private String getAppUrl(HttpServletRequest request) {
+	        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+	    }
 	@PostMapping("/saveAppointment")
-	public ResponseEntity<?> saveAppointment(@RequestBody Appointment appointment,@RequestParam int userId) {
+	public ResponseEntity<?> saveAppointment(@RequestBody Appointment appointment,@RequestParam Long userId,final HttpServletRequest request) {
 		try {
+			if(userId==0) {
+				   final User registered = userService.registerNewUserAccount(appointment);
+				   eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request),true));
+				   userId=registered.getId();
+				   Appointment a=appointmentService.addAppointment(appointment, userId);
+				   return new ResponseEntity<>(a, HttpStatus.OK);
+			}else {
 		Appointment savedAppointment= appointmentService.addAppointment(appointment, userId);
+		 return new ResponseEntity<>(savedAppointment, HttpStatus.OK);}
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@RequestMapping("/appointmentViewed")
+	public ResponseEntity<?> appointmentViewed(@RequestBody Long id,@RequestParam String viewed ) {
+		try {
+		Appointment savedAppointment= appointmentService.appointmentViewed(id,viewed );
 		 return new ResponseEntity<>(savedAppointment, HttpStatus.OK);
 		}catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
 	@GetMapping("/getAppointment/{status}")
 	public ResponseEntity<?> getAppointmentByStatus(@PathVariable String status) {
 		try {
@@ -73,7 +112,7 @@ public class AppointmentController {
 	}
 	
 	@PostMapping("/editAppointment")
-	public ResponseEntity<?> editAppointment(@RequestBody Appointment appointment,@RequestParam int userId) {
+	public ResponseEntity<?> editAppointment(@RequestBody Appointment appointment,@RequestParam Long userId) {
 		try {
 		Appointment savedAppointment= appointmentService.addAppointment(appointment, userId);
 		 return new ResponseEntity<>(savedAppointment, HttpStatus.OK);

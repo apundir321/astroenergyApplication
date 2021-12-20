@@ -1,9 +1,16 @@
 package com.astroenergy.java.astroenergyApplication.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Ratelist {
@@ -15,12 +22,43 @@ public class Ratelist {
 	private int rateOfValues;
 	private String status;
 	private String remarks;
+	@CreationTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date updatedAt;
 	
+	private Date deletedAt;
 	public Ratelist() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}

@@ -36,6 +36,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     private void confirmRegistration(final OnRegistrationCompleteEvent event) {
+    	
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
@@ -54,7 +55,11 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + " \r\n" + confirmationUrl);
+        if(event.isAppointmentUser()) {
+        String note="Your Appointment has been successfully booked.Your username and password for login are same as your email Id.";
+        email.setText(message+"\r\n"+note);
+        }else {
+        email.setText(message + " \r\n" + confirmationUrl);}
         email.setFrom(env.getProperty("support.email"));
         return email;
     }

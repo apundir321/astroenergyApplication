@@ -1,5 +1,6 @@
 package com.astroenergy.java.astroenergyApplication.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 
 
@@ -35,9 +42,41 @@ public class TimeSlot {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "timeslot_day", joinColumns = { @JoinColumn(name = "timeslot_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "day_id") })
-	private Set<Day> days = new HashSet<>();
-
 	
+	private Set<Day> days = new HashSet<>();
+	@CreationTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date updatedAt;
+	
+	private Date deletedAt;
+	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
 	public Set<Day> getDays() {
 		return days;
 	}

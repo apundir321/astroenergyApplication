@@ -10,7 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Appointment {
@@ -60,7 +66,18 @@ public class Appointment {
 	private String phoneNumber;
 	
 	private String status;
+	@Lob
 	private String remedy;
+	
+	@CreationTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date updatedAt;
+	
+	private String viewed;
+	private Date deletedAt;
 	
 	public Appointment() {
 		super();
@@ -69,6 +86,14 @@ public class Appointment {
 
 	public String getRemedy() {
 		return remedy;
+	}
+
+	public String getViewed() {
+		return viewed;
+	}
+
+	public void setViewed(String viewed) {
+		this.viewed = viewed;
 	}
 
 	public void setRemedy(String remedy) {
@@ -84,6 +109,30 @@ public class Appointment {
 	}
 
 
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 
 	public TimeSlot getTimeSlot() {
 		return timeSlot;

@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Enquiry {
@@ -18,14 +23,53 @@ public class Enquiry {
 	private String email;
 	private String mobile;
 	private String status;
+	private String viewed;
+	@CreationTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date updatedAt;
 	
-	
+	private Date deletedAt;
 	
 	public Enquiry() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
+	public String getViewed() {
+		return viewed;
+	}
+
+	public void setViewed(String viewed) {
+		this.viewed = viewed;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
 	public int getSno() {
 		return sno;
 	}

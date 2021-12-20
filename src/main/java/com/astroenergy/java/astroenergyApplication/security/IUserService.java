@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.astroenergy.java.astroenergyApplication.dto.UserDto;
 import com.astroenergy.java.astroenergyApplication.error.UserAlreadyExistException;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.NewLocationToken;
 import com.astroenergy.java.astroenergyApplication.model.PasswordResetToken;
 import com.astroenergy.java.astroenergyApplication.model.User;
@@ -16,8 +17,9 @@ import com.astroenergy.java.astroenergyApplication.model.VerificationToken;
 public interface IUserService {
 
     User registerNewUserAccount(UserDto accountDto,boolean isRecuiter) throws UserAlreadyExistException;
-
+    User registerNewUserAccount(Appointment appointment) throws UserAlreadyExistException;
     User getUser(String verificationToken);
+    User changeUserView(Long id,String viewed);
 
     void saveRegisteredUser(User user);
 

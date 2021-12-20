@@ -1,6 +1,7 @@
 package com.astroenergy.java.astroenergyApplication.model;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +15,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +34,7 @@ public class User {
     private Long id;
 
     private String firstName;
-
+    private String viewed;
     private String lastName;
 
     private String email;
@@ -48,7 +53,14 @@ public class User {
 	@JoinColumn(name = "profile_id")
 	private UserProfile userProfile;
 	
+	@CreationTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date updatedAt;
 	
+	private Date deletedAt;
     
     @JsonIgnore
     private String secret;
@@ -68,8 +80,41 @@ public class User {
     public Long getId() {
         return id;
     }
+    
 
-    public void setId(final Long id) {
+    public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public String getViewed() {
+		return viewed;
+	}
+
+	public void setViewed(String viewed) {
+		this.viewed = viewed;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public void setId(final Long id) {
         this.id = id;
     }
 

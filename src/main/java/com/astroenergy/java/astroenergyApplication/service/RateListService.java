@@ -1,11 +1,13 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.astroenergy.java.astroenergyApplication.dao.RatelistRepo;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Ratelist;
 
 
@@ -14,6 +16,16 @@ import com.astroenergy.java.astroenergyApplication.model.Ratelist;
 public class RateListService {
 @Autowired
 RatelistRepo rateListRepo;
+public Ratelist deleteRatelist(int id) throws Exception  {
+	try {
+		Ratelist r=rateListRepo.findBySnoAndDeletedAtIsNull(id);
+		r.setDeletedAt(new Date());
+		return rateListRepo.save(r);
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
 
 public Ratelist addRatelist(Ratelist rateList)throws Exception
 {
@@ -30,7 +42,7 @@ public Ratelist addRatelist(Ratelist rateList)throws Exception
 public List<Ratelist> getAllRatelist()throws Exception
 {
 	try {
-		return  rateListRepo.findAll();
+		return  rateListRepo.findByDeletedAtIsNullOrderBySnoDesc();
 		
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -41,7 +53,7 @@ public List<Ratelist> getAllRatelist()throws Exception
 public Ratelist getRateListDetail(int id)throws Exception
 {
 	try {
-		return  rateListRepo.findById(id).get();
+		return  rateListRepo.findBySnoAndDeletedAtIsNull(id);
 		
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -58,14 +70,5 @@ public Ratelist editRatelist(Ratelist rateList)throws Exception
 			throw e;
 		}
 }
-public Ratelist deleteRatelist(Ratelist rateList)throws Exception
-{
-	try {rateList.setStatus("DELETED");
-		Ratelist r = rateListRepo.save(rateList);
-		 return r;
-		}catch (Exception e) {
-			// TODO: handle exception
-			throw e;
-		}
-}
+
 }

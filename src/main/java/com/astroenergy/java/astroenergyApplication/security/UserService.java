@@ -27,6 +27,7 @@ import com.astroenergy.java.astroenergyApplication.dao.UserRepository;
 import com.astroenergy.java.astroenergyApplication.dao.VerificationTokenRepository;
 import com.astroenergy.java.astroenergyApplication.dto.UserDto;
 import com.astroenergy.java.astroenergyApplication.error.UserAlreadyExistException;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.NewLocationToken;
 import com.astroenergy.java.astroenergyApplication.model.PasswordResetToken;
 import com.astroenergy.java.astroenergyApplication.model.Role;
@@ -104,7 +105,38 @@ public class UserService implements IUserService {
         	if(role==null)
         	{
         		role = new Role();
-        		role.setName("ROLE_EMPLOYEE");
+        		role.setName("ROLE_USER");
+        		roleRepository.save(role);
+        	}
+        	roles.add(role);
+        
+        user.setRoles(roles);
+        user.setUserProfile(profile);
+        return userRepository.save(user);
+    }
+    public User registerNewUserAccount(Appointment appointment) {
+        if (emailExists(appointment.getEmail())) {
+            throw new UserAlreadyExistException("There is an account with that email address: " + appointment.getEmail());
+        }
+        Role role = null;
+        UserProfile profile = null;
+        
+        final User user = new User();
+        List<Role> roles = new ArrayList<Role>();
+        user.setFirstName(appointment.getName());
+        user.setPassword(passwordEncoder.encode(appointment.getEmail()));
+        user.setEmail(appointment.getEmail());
+        user.setCountryCode(appointment.getCountry());
+       user.setEnabled(true);
+        	profile = new UserProfile();
+        	profile.setEmail(appointment.getEmail());
+        	profile.setFirstName(appointment.getName());
+    
+        	role = roleRepository.findByName("ROLE_USER");
+        	if(role==null)
+        	{
+        		role = new Role();
+        		role.setName("ROLE_USER");
         		roleRepository.save(role);
         	}
         	roles.add(role);
@@ -128,6 +160,16 @@ public class UserService implements IUserService {
         return tokenRepository.findByToken(VerificationToken);
     }
 
+    public User changeUserView(Long id,String viewed)  {
+    	try {
+    		User u=userRepository.findById(id).get();
+    		u.setViewed(viewed);
+    	return userRepository.save(u);
+    	}
+    	catch(Exception e) {
+    		throw e;
+    	}
+    }
     @Override
     public void saveRegisteredUser(final User user) {
         userRepository.save(user);

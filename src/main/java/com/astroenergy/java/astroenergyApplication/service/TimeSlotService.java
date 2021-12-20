@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.astroenergy.java.astroenergyApplication.dao.DayRepo;
 import com.astroenergy.java.astroenergyApplication.dao.TimeSlotRepo;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Day;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
 
@@ -25,7 +26,16 @@ public class TimeSlotService {
 	@Autowired
 	DayRepo dayRepo;
 	
-	
+	public TimeSlot deleteTimeSlot(Long id) throws Exception  {
+		try {
+			TimeSlot t=timeSlotRepo.findByIdAndDeletedAtIsNull(id);
+			t.setDeletedAt(new Date());
+			return timeSlotRepo.save(t);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 	public TimeSlot saveTimeSlot(TimeSlot timeSlot)throws Exception
 	{
 		try {
@@ -47,16 +57,10 @@ public class TimeSlotService {
 	
 	public TimeSlot getTimeSlotDetail(long id) throws Exception
 	{
-		Optional<TimeSlot> timeSlot = null;
+		
 		try {
-			timeSlot = timeSlotRepo.findById(id);
-			if(timeSlot.isPresent())
-			{
-				return timeSlot.get();
-			}else
-			{
-				throw new Exception("Time slot not found");
-			}
+		TimeSlot t= timeSlotRepo.findByIdAndDeletedAtIsNull(id);
+		return t;
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -103,7 +107,7 @@ public class TimeSlotService {
 	
 	public List<TimeSlot> getSlots()
 	{
-		return (List<TimeSlot>) timeSlotRepo.findAll();
+		return (List<TimeSlot>) timeSlotRepo.findByDeletedAtIsNullOrderByIdDesc();
 	}
 	
 	

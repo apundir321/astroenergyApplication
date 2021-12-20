@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.astroenergy.java.astroenergyApplication.dao.RatelistRepo;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Ratelist;
 import com.astroenergy.java.astroenergyApplication.service.RateListService;
 
@@ -20,7 +22,16 @@ public class RateListController {
 	private RatelistRepo rateListRepo;
 	@Autowired
 	RateListService rateListService;
-
+	@DeleteMapping("/deleteRatelist/{id}")
+	public ResponseEntity<?> deleteRatelist(@PathVariable int id) {
+		try {
+		Ratelist r= rateListService.deleteRatelist(id);
+		 return new ResponseEntity<>(r, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	@RequestMapping("/addRateList")
 	public ResponseEntity<?> addRateList(@RequestBody Ratelist rateList) {
 		try {
@@ -60,17 +71,7 @@ public class RateListController {
 		}
 	}
 
-	@RequestMapping("/deleteRateList/{sno}")
-	public ResponseEntity<?> deleteRatelist(@RequestBody Ratelist rateList) {
-		try {
 
-			Ratelist rt = rateListService.deleteRatelist(rateList);
-			return new ResponseEntity<>(rt, HttpStatus.OK);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 	
 	@RequestMapping("/getRateListDetail/{id}")
 	public ResponseEntity<?> getRateListDetail(@PathVariable int id) {

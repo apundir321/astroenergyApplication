@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.astroenergy.java.astroenergyApplication.model.Feedback;
 
 public interface FeedbackRepo extends JpaRepository<Feedback,Integer> {
-public List<Feedback> findByFirstName(String name );
+public List<Feedback> findByFirstNameAndDeletedAtIsNull(String name );
+List<Feedback> findByDeletedAtIsNullOrderBySnoDesc();
+Feedback findBySnoAndDeletedAtIsNull(int id);
 }

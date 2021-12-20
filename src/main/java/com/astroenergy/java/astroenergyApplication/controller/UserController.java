@@ -52,6 +52,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.astroenergy.java.astroenergyApplication.jwt.AccountCredentials;
 import com.astroenergy.java.astroenergyApplication.jwt.JwtTokenUtil;
+import com.astroenergy.java.astroenergyApplication.model.Feedback;
 import com.astroenergy.java.astroenergyApplication.model.Location;
 import com.astroenergy.java.astroenergyApplication.model.User;
 import com.astroenergy.java.astroenergyApplication.model.UserProfile;
@@ -134,7 +135,16 @@ public class UserController {
 		return new ResponseEntity<UserProfile>(profile,HttpStatus.CREATED);
 		
 	}
-	
+	@RequestMapping("/changeUserView")
+	public ResponseEntity<?> changeUserView(@RequestParam Long id,@RequestParam String viewed) {
+		try {
+		User user = userService.changeUserView(id,viewed);
+		 return new ResponseEntity<>(user, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}	
 	
 	
 	@RequestMapping(value = "/getProfile", method = RequestMethod.GET)
@@ -385,5 +395,24 @@ public class UserController {
                 return MediaType.APPLICATION_OCTET_STREAM;
         }
     }
+	
+	public static void main(String[] args) {
+		UserProfile profile = new UserProfile();
+		profile.setAboutMe("Hii");
+		profile.setFirstName("Akash");
+		profile.setLastName("Vashisht");
+		profile.setEmail("akash@gmail.com");
+		profile.setPhone("9560696372");
+		profile.setGender("Male");
+		
+          		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			System.out.println(mapper.writeValueAsString(profile));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

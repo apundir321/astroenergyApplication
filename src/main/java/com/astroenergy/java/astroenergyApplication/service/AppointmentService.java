@@ -1,6 +1,7 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
 import com.astroenergy.java.astroenergyApplication.model.User;
 import com.astroenergy.java.astroenergyApplication.model.UserProfile;
+import com.astroenergy.java.astroenergyApplication.security.UserService;
 
 
 @Service
@@ -44,15 +46,36 @@ public class AppointmentService {
 	
 	@Autowired
 	TimeSlotRepo timeSlotRepo; 
-	
+	@Autowired 
+	UserService userService;
 	@PersistenceContext
 	EntityManager em;
 	
+	public Appointment appointmentViewed(Long id,String viewed) {
+		try {
+			Appointment a=appointMentRepo.findByIdAndDeletedAtIsNull(id);
+		a.setViewed(viewed);
+		return appointMentRepo.save(a);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 	
+	public Appointment deleteAppointment(Long id) throws Exception  {
+		try {
+			Appointment a=appointMentRepo.findByIdAndDeletedAtIsNull(id);
+			a.setDeletedAt(new Date());
+			return appointMentRepo.save(a);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 	public List<Appointment> getAppointments()throws Exception
 	{
 		try {
-			return (List<Appointment>) appointMentRepo.findAll();
+			return (List<Appointment>) appointMentRepo.findByDeletedAtIsNullOrderByIdDesc();
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -79,8 +102,11 @@ public class AppointmentService {
 			throw e;
 		}
 	}
+	 
 	
-	public Appointment addAppointment(Appointment appointment,int userProfileId)throws Exception
+	
+	
+	public Appointment addAppointment(Appointment appointment,Long userProfileId)throws Exception
 	{
 		
 		try {
@@ -110,7 +136,7 @@ public class AppointmentService {
 	public List<Appointment> getAppointMentByStatus(String status)throws Exception
 	{
 		try {
-			return (List<Appointment>) appointMentRepo.findByStatus(status);
+			return (List<Appointment>) appointMentRepo.findByStatusAndDeletedAtIsNull(status);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -120,7 +146,7 @@ public class AppointmentService {
 	public Appointment getAppointMentDetail(long id)throws Exception
 	{
 		try {
-			return appointMentRepo.findById(id).get();
+			return appointMentRepo.findByIdAndDeletedAtIsNull(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -168,7 +194,7 @@ public class AppointmentService {
 		User user=userRepo.findById(userId).get();
 		UserProfile userProfile=user.getUserProfile();
 		int profileId=userProfile.getId();
-		List<Appointment> appointments=appointMentRepo.findByUserProfileId(profileId);
+		List<Appointment> appointments=appointMentRepo.findByUserProfileIdAndDeletedAtIsNull(profileId);
 		return appointments;
 		
 		}

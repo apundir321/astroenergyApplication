@@ -1,5 +1,6 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.astroenergy.java.astroenergyApplication.dao.HolidayRepo;
 import com.astroenergy.java.astroenergyApplication.dao.TimeSlotRepo;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Day;
 import com.astroenergy.java.astroenergyApplication.model.Holiday;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
@@ -21,6 +23,16 @@ public class HolidayService {
 	private HolidayRepo holidayRepo;
 	
 	private TimeSlotRepo timeSlotRepo;
+	public Holiday deleteHoliday(Long id) throws Exception  {
+		try {
+			Holiday h=holidayRepo.findByIdAndDeletedAtIsNull(id);
+			h.setDeletedAt(new Date());
+			return holidayRepo.save(h);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 
 	public Holiday saveHoliday(Holiday holiday) throws Exception {
 		try {
@@ -43,19 +55,11 @@ public class HolidayService {
 
 	}
 	
-	public Holiday deleteHoliday(Holiday holiday) throws Exception {
-		try {
-			return holidayRepo.save(holiday);
-		} catch (Exception e) {
-			// TODO: handle exception
-			throw e;
-		}
 
-	}
 	
-	public Optional<Holiday> findHoliday(long id) throws Exception {
+	public Holiday findHoliday(long id) throws Exception {
 		try {
-			return holidayRepo.findById(id);
+			return holidayRepo.findByIdAndDeletedAtIsNull(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -65,7 +69,7 @@ public class HolidayService {
 	
 	public List<Holiday> getHolidays() throws Exception {
 		try {
-			return (List<Holiday>) holidayRepo.findAll();
+			return (List<Holiday>) holidayRepo.findByDeletedAtIsNullOrderByIdDesc();
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -75,12 +79,11 @@ public class HolidayService {
 	
 	public Holiday addTimeSlotsToHoliday(Set<TimeSlot> timeSlots,long id) throws Exception
 	{
-		Optional<Holiday> holiday = null;
+		Holiday holiday = null;
 		try {
-			holiday = holidayRepo.findById(id);
-			if(holiday.isPresent())
-			{
-				Holiday savedHoliday =  holiday.get();
+			holiday = holidayRepo.findByIdAndDeletedAtIsNull(id);
+			
+				Holiday savedHoliday =  holiday;
 				Set<TimeSlot> savedTimeSlots = new HashSet<>();
 				for(TimeSlot t : savedTimeSlots)
 				{
@@ -89,11 +92,8 @@ public class HolidayService {
 				}
 				savedHoliday.setTimeSlots(savedTimeSlots);
 				return holidayRepo.save(savedHoliday);
-			}else
-			{
-				throw new Exception("Holiday not found");
-			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// TODO: handle exception
 			throw e;
 		}
@@ -102,17 +102,11 @@ public class HolidayService {
 
 	public Holiday getHolidayDetail(long id)throws Exception {
 		// TODO Auto-generated method stub
-		Optional<Holiday> holiday = null;
+		
 		try {
-			holiday = holidayRepo.findById(id);
-			if(holiday.isPresent())
-			{
-				Holiday savedHoliday =  holiday.get();
-				return savedHoliday;
-			}else
-			{
-				throw new Exception("Holiday not found");
-			}
+		Holiday	holiday = holidayRepo.findByIdAndDeletedAtIsNull(id);
+				return holiday;
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;

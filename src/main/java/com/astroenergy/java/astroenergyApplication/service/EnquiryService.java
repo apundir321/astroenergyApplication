@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.astroenergy.java.astroenergyApplication.dao.EnquiryRepo;
+import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Enquiry;
 import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
 
@@ -31,9 +32,29 @@ public class EnquiryService {
 @Autowired
 EnquiryRepo enquiryRepo;
 
+public Enquiry deleteEnquiry(int id) throws Exception  {
+	try {
+		Enquiry a=enquiryRepo.findBySnoAndDeletedAtIsNull(id);
+		a.setDeletedAt(new Date());
+		return enquiryRepo.save(a);
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
+public Enquiry enquiryViewed(int id,String viewed) {
+	try {
+		Enquiry e=enquiryRepo.findBySnoAndDeletedAtIsNull(id);
+		e.setViewed(viewed);
+		return enquiryRepo.save(e);
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
 public List<Enquiry> getAll(){
 try {
-	return enquiryRepo.findAll();
+	return enquiryRepo.findByDeletedAtIsNullOrderBySnoDesc();
 }catch(Exception e){
 	throw e;
 	}
@@ -51,7 +72,7 @@ public Enquiry addEnquiry(Enquiry enquiry) {
 
 public Enquiry getEnquiryDetail(int id) {
 	try {
-		Enquiry e=enquiryRepo.findById(id).get();
+		Enquiry e=enquiryRepo.findBySnoAndDeletedAtIsNull(id);
 		return e;
 	}
 	catch(Exception e) {
@@ -61,7 +82,7 @@ public Enquiry getEnquiryDetail(int id) {
 
 public Enquiry searchByName(String name) {
 	try {
-		Enquiry e=enquiryRepo.findByName(name);
+		Enquiry e=enquiryRepo.findByNameAndDeletedAtIsNull(name);
 	return e;}
 	catch(Exception e){throw e;}
 }

@@ -31,6 +31,20 @@ public class Blog {
 	@UpdateTimestamp
 	@Temporal(value=TemporalType.DATE)
 	private Date updatedAt;
+	private Date deletedAt;
+	@Lob
+	private String keywords;
+	@Lob
+	private String description;
+	@Lob
+	private String slug;
+	
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -42,6 +56,25 @@ public class Blog {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getKeywords() {
+		return keywords;
+	}
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getSlug() {
+		return slug;
+	}
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 	public String getSubtitle() {
 		return subtitle;

@@ -12,4 +12,6 @@ import com.astroenergy.java.astroenergyApplication.model.UserProfile;
 public interface TimeSlotRepo  extends CrudRepository<TimeSlot, Long> {
 	@Query(value="SELECT t FROM TimeSlot t JOIN t.days d where d.day=:dayWeek")
 List<TimeSlot> findByDay(@Param("dayWeek") String dayWeek);
+	List<TimeSlot> findByDeletedAtIsNullOrderByIdDesc();
+	TimeSlot findByIdAndDeletedAtIsNull(Long id);
 }
