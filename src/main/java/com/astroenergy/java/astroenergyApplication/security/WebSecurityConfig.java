@@ -46,6 +46,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.GET,"/getProfilePicByProfileId/**").permitAll()
         .antMatchers(HttpMethod.GET,"/console").permitAll()
         .antMatchers(HttpMethod.GET,"/getLocations").permitAll()
+        .antMatchers(HttpMethod.GET,"/getBlogPic/**").permitAll()
+        .antMatchers(HttpMethod.GET,"/getAllBlogs").permitAll()
+        .antMatchers(HttpMethod.GET,"/getBlog").permitAll()
+        .antMatchers(HttpMethod.GET,"/getBlogBySlug").permitAll()
+        .antMatchers(HttpMethod.GET,"/getBlogByStatus").permitAll()
+        
+        
         .antMatchers(HttpMethod.POST,"/AddEnquiry").permitAll()
         .antMatchers(HttpMethod.POST,"/saveAppointment").permitAll()
         .antMatchers(HttpMethod.POST,"/user/resetPassword").permitAll()

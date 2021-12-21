@@ -60,4 +60,12 @@ public Comment commentViewed(Long id,String viewed) {
 		throw e;
 	}
 }
+public List<Comment> getCommentReplies(Long id){
+	try {
+		return commentRepo.findByReplyOfIdAndDeletedAtIsNullOrderByIdDesc(id);
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
 }

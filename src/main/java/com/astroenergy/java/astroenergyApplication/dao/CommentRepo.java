@@ -10,5 +10,5 @@ public interface CommentRepo extends JpaRepository<Comment,Long> {
 List<Comment> findByBlogIdAndDeletedAtIsNullOrderByIdDesc(Long id);
 Comment findByIdAndDeletedAtIsNull(Long id);
 List<Comment> findByDeletedAtIsNullOrderByIdDesc();
-
+List<Comment> findByReplyOfIdAndDeletedAtIsNullOrderByIdDesc(Long id);
 }

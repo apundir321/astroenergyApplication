@@ -36,7 +36,9 @@ public class Blog {
 	private String keywords;
 	@Lob
 	private String description;
-	@Lob
+	
+	
+	@Column(unique=true,nullable=false)
 	private String slug;
 	
 	public Date getDeletedAt() {

@@ -73,4 +73,14 @@ public ResponseEntity<?> getBlogComments(@RequestParam Long id) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
+@RequestMapping("/getCommentReplies")
+public ResponseEntity<?> getCommentReplies(@RequestParam Long id) {
+	try {
+	List<Comment> c = commentService.getCommentReplies(id);
+	 return new ResponseEntity<>(c, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
 }
