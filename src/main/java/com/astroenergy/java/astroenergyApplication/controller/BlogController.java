@@ -95,6 +95,16 @@ public ResponseEntity<?> getBlogByStatus(@RequestParam String status) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
+@RequestMapping("/updateBlogStatus")
+public ResponseEntity<?> updateBlogStatus(@RequestParam Long id,@RequestParam String status) {
+	try {
+	Blog b = blogService.updateBlogStatus(id,status);
+	 return new ResponseEntity<Blog>(b, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
 @RequestMapping(value = "/uploadBlogPic", method = RequestMethod.POST)
 public ResponseEntity<?> uploadBlogPic(@RequestPart(value= "file" ,required = true) final MultipartFile multipartFile,@RequestParam Long blogId)
 		throws Exception {

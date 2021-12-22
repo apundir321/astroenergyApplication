@@ -51,8 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.GET,"/getBlog").permitAll()
         .antMatchers(HttpMethod.GET,"/getBlogBySlug").permitAll()
         .antMatchers(HttpMethod.GET,"/getBlogByStatus").permitAll()
-        
-        
+        .antMatchers(HttpMethod.POST,"/addComment").permitAll()
+        .antMatchers(HttpMethod.POST,"/editComment").permitAll()
+        .antMatchers(HttpMethod.GET,"/getCommentById").permitAll()
+        .antMatchers(HttpMethod.GET,"/getBlogComments").permitAll()
+        .antMatchers(HttpMethod.GET,"/getCommentReplies").permitAll()
         .antMatchers(HttpMethod.POST,"/AddEnquiry").permitAll()
         .antMatchers(HttpMethod.POST,"/saveAppointment").permitAll()
         .antMatchers(HttpMethod.POST,"/user/resetPassword").permitAll()

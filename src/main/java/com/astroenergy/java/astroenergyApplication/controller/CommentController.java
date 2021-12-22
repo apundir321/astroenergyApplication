@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.astroenergy.java.astroenergyApplication.model.Blog;
 import com.astroenergy.java.astroenergyApplication.model.Comment;
 import com.astroenergy.java.astroenergyApplication.model.Enquiry;
+import com.astroenergy.java.astroenergyApplication.model.User;
+import com.astroenergy.java.astroenergyApplication.security.UserService;
 import com.astroenergy.java.astroenergyApplication.service.CommentService;
 
 @RestController
 public class CommentController {
 @Autowired
 CommentService commentService;
+
 @DeleteMapping("/deleteComment/{id}")
 public ResponseEntity<?> deleteComment(@PathVariable Long id) {
 	try {
@@ -35,6 +39,27 @@ public ResponseEntity<?> deleteComment(@PathVariable Long id) {
 public ResponseEntity<?> addComment(@RequestBody Comment comment) {
 	try {
 	Comment c = commentService.addComment(comment);
+	
+	 return new ResponseEntity<Comment>(c, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+@RequestMapping("/editComment")
+public ResponseEntity<?> editComment(@RequestBody Comment comment) {
+	try {
+	Comment c = commentService.addComment(comment);
+	 return new ResponseEntity<Comment>(c, HttpStatus.OK);
+	}catch (Exception e) {
+		// TODO: handle exception
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+@RequestMapping("/updateCommentStatus")
+public ResponseEntity<?> commentStatus(@RequestParam Long id,@RequestParam String status) {
+	try {
+	Comment c = commentService.updateCommentStatus(id,status);
 	 return new ResponseEntity<Comment>(c, HttpStatus.OK);
 	}catch (Exception e) {
 		// TODO: handle exception

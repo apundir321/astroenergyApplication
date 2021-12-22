@@ -30,18 +30,41 @@ public class Comment {
 	private Blog blog;
 	private String status;
 	private String viewed;
+	private String commentedBy;
 	private String email;
 	@UpdateTimestamp
 	@Temporal(value=TemporalType.TIMESTAMP)
 	private Date updatedAt;
 	private Date deletedAt;
-	
+	@ManyToOne
+	private User user;
 	@ManyToOne
 	private Comment replyOf;
 	public Long getId() {
 		return id;
 	}
 	
+	
+	public String getCommentedBy() {
+		return commentedBy;
+	}
+
+
+	public void setCommentedBy(String commentedBy) {
+		this.commentedBy = commentedBy;
+	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
 	public String getViewed() {
 		return viewed;
 	}

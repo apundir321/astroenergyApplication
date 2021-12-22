@@ -70,5 +70,16 @@ public Blog getBlogByStatus(String status) {
 		throw e;
 	}
 }
+public Blog updateBlogStatus(Long id,String status) {
+	try {
+		Blog b=blogRepo.findByIdAndDeletedAtIsNull(id);
+		b.setStatus(status);
+		return blogRepo.save(b);
+		
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
 }
 
