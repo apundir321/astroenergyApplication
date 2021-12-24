@@ -44,6 +44,7 @@ public class HolidayController {
 			return new ResponseEntity<Holiday>(savedHoliday, HttpStatus.CREATED);
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return new ResponseEntity<String>("Error in saving Holiday", HttpStatus.INTERNAL_SERVER_ERROR);
 			
 		}
@@ -54,7 +55,7 @@ public class HolidayController {
 	public ResponseEntity<?> editHoliday(@RequestBody Holiday holiday)
 	{
 		try {
-			Holiday savedHoliday = holidayService.saveHoliday(holiday);
+			Holiday savedHoliday = holidayService.editHoliday(holiday);
 			return new ResponseEntity<Holiday>(savedHoliday, HttpStatus.CREATED);
 		} catch (Exception e) {
 			// TODO: handle exception
