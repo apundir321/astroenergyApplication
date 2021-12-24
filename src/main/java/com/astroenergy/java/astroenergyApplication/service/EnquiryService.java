@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.astroenergy.java.astroenergyApplication.dao.ContactRepo;
 import com.astroenergy.java.astroenergyApplication.dao.EnquiryRepo;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
+import com.astroenergy.java.astroenergyApplication.model.Contact;
 import com.astroenergy.java.astroenergyApplication.model.Enquiry;
 import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
 
@@ -31,6 +33,9 @@ public class EnquiryService {
 	
 @Autowired
 EnquiryRepo enquiryRepo;
+
+@Autowired
+ContactRepo contactRepo;
 
 public Enquiry deleteEnquiry(int id) throws Exception  {
 	try {
@@ -130,6 +135,27 @@ public List<Enquiry> getEnquiry(SearchEnquiry searchEnquiry) {
 
 	    return em.createQuery(cq).getResultList();
 }
+
+
+public Contact addContact(Contact contact) {
+	try {
+		Contact e=contactRepo.save(contact);
+		return e;
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
+
+	public List<Contact> getContacts()
+	{
+		try {
+			return contactRepo.findAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
 
 
 }

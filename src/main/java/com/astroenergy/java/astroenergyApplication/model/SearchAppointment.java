@@ -6,6 +6,13 @@ public class SearchAppointment {
 	
 	private Date fromDate;
 	private Date toDate;
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public Date getFromDate() {
 		return fromDate;
 	}

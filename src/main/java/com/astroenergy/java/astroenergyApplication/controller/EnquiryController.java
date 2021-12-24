@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
+import com.astroenergy.java.astroenergyApplication.model.Contact;
 import com.astroenergy.java.astroenergyApplication.model.Country;
 import com.astroenergy.java.astroenergyApplication.model.Enquiry;
 import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
@@ -95,6 +96,37 @@ public class EnquiryController {
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@RequestMapping("/addContact")
+	public ResponseEntity<?> addContact(@RequestBody Contact contact) {
+		try {
+			Contact e = enquiryService.addContact(contact);
+			return new ResponseEntity<Contact>(e, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	@RequestMapping("/getContact")
+	public ResponseEntity<?> getContact() {
+			Contact e = null;
+		try {
+			List<Contact> contacts = enquiryService.getContacts();
+			if(contacts.size()>0)
+			{
+				e = contacts.get(0);
+				return new ResponseEntity<Contact>(e, HttpStatus.OK);
+			}else {
+				return new ResponseEntity<String>("Contact not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+		} catch (Exception ex) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

@@ -18,25 +18,26 @@ import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
 
 @Service
 public class HolidayService {
-	
+
 	@Autowired
 	private HolidayRepo holidayRepo;
-	
+
+	@Autowired
 	private TimeSlotRepo timeSlotRepo;
-	public Holiday deleteHoliday(Long id) throws Exception  {
+
+	public Holiday deleteHoliday(Long id) throws Exception {
 		try {
-			Holiday h=holidayRepo.findByIdAndDeletedAtIsNull(id);
+			Holiday h = holidayRepo.findByIdAndDeletedAtIsNull(id);
 			h.setDeletedAt(new Date());
 			return holidayRepo.save(h);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			throw e;
 		}
 	}
 
 	public Holiday saveHoliday(Holiday holiday) throws Exception {
 		try {
-			
+
 			return holidayRepo.save(holiday);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -44,19 +45,26 @@ public class HolidayService {
 		}
 
 	}
-	
+
 	public Holiday editHoliday(Holiday holiday) throws Exception {
 		try {
+
+			
+			Set<TimeSlot> savedTimeSlots = new HashSet<>();
+			for (TimeSlot t : holiday.getTimeSlots()) {
+				TimeSlot savedTimeSlot = timeSlotRepo.findById(t.getId()).get();
+				savedTimeSlots.add(savedTimeSlot);
+			}
+			holiday.setTimeSlots(savedTimeSlots);
 			return holidayRepo.save(holiday);
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
 		}
 
 	}
-	
 
-	
 	public Holiday findHoliday(long id) throws Exception {
 		try {
 			return holidayRepo.findByIdAndDeletedAtIsNull(id);
@@ -66,7 +74,7 @@ public class HolidayService {
 		}
 
 	}
-	
+
 	public List<Holiday> getHolidays() throws Exception {
 		try {
 			return (List<Holiday>) holidayRepo.findByDeletedAtIsNullOrderByIdDesc();
@@ -76,42 +84,38 @@ public class HolidayService {
 		}
 
 	}
-	
-	public Holiday addTimeSlotsToHoliday(Set<TimeSlot> timeSlots,long id) throws Exception
-	{
+
+	public Holiday addTimeSlotsToHoliday(Set<TimeSlot> timeSlots, long id) throws Exception {
 		Holiday holiday = null;
 		try {
 			holiday = holidayRepo.findByIdAndDeletedAtIsNull(id);
-			
-				Holiday savedHoliday =  holiday;
-				Set<TimeSlot> savedTimeSlots = new HashSet<>();
-				for(TimeSlot t : savedTimeSlots)
-				{
-					TimeSlot savedTimeSlot = timeSlotRepo.findById(t.getId()).get();
-					savedTimeSlots.add(savedTimeSlot);
-				}
-				savedHoliday.setTimeSlots(savedTimeSlots);
-				return holidayRepo.save(savedHoliday);
-		}
-		catch (Exception e) {
+
+			Holiday savedHoliday = holiday;
+			Set<TimeSlot> savedTimeSlots = new HashSet<>();
+			for (TimeSlot t : timeSlots) {
+				TimeSlot savedTimeSlot = timeSlotRepo.findById(t.getId()).get();
+				savedTimeSlots.add(savedTimeSlot);
+			}
+			savedHoliday.setTimeSlots(savedTimeSlots);
+			return holidayRepo.save(savedHoliday);
+		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
 		}
-		
+
 	}
 
-	public Holiday getHolidayDetail(long id)throws Exception {
+	public Holiday getHolidayDetail(long id) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 		try {
-		Holiday	holiday = holidayRepo.findByIdAndDeletedAtIsNull(id);
-				return holiday;
-			
+			Holiday holiday = holidayRepo.findByIdAndDeletedAtIsNull(id);
+			return holiday;
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
 		}
 	}
-	
 
 }

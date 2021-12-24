@@ -186,6 +186,17 @@ public class AppointmentService {
 			  e.printStackTrace();
 			  
 		  }}
+		    
+		    if(searchAppointment.getId()!=null) {
+		    	User user=userRepo.findById(Long.parseLong(searchAppointment.getId())).get();
+				UserProfile userProfile=user.getUserProfile();
+		    	try{predicates.add(cb.equal(appointment.get("userProfile"), userProfile));		    	
+		    }
+		  catch(Exception e) {
+			  e.printStackTrace();
+			  
+		  }}
+		    
 			    if(searchAppointment.getFromDate()!=null) {
 			    	try{predicates.add(cb.greaterThanOrEqualTo(appointment.get("appointDate"), searchAppointment.getFromDate()));
 			    	}
@@ -221,6 +232,8 @@ public class AppointmentService {
 		
 		
 	}
+	
+	
 	public Appointment applyPromoCode(Long appointmentId,int promoId) {
 		try{Appointment appointment=appointMentRepo.findById(appointmentId).get();
 		PromoCode promo= promoRepo.findById(promoId).get();
