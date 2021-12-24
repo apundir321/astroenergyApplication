@@ -131,7 +131,24 @@ public class AppointmentService {
 		}
 		
 	}
-	
+	public List<Appointment> getUserAppointmentByStatus(Long userId,String status){
+		try {
+			User user=userRepo.findById(userId).get();
+			UserProfile userProfile=user.getUserProfile();
+			int profileId=userProfile.getId();
+			List<Appointment> appointments=appointMentRepo.findByUserProfileIdAndDeletedAtIsNull(profileId);
+			List <Appointment> requiredAppointment=new ArrayList<>();
+			for(Appointment appoint:appointments) {
+				if(appoint.getStatus().equals(status)){
+					requiredAppointment.add(appoint);
+				}
+			}
+			return requiredAppointment;
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 	
 	public List<Appointment> getAppointMentByStatus(String status)throws Exception
 	{

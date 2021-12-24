@@ -98,6 +98,17 @@ public class AppointmentController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("/getUserAppointmentByStatus")
+	public ResponseEntity<?> getUserAppointmentByStatus(@RequestParam Long userId,@RequestParam String status) {
+		try {
+			List<Appointment> c= appointmentService.getUserAppointmentByStatus(userId,status);
+			 return new ResponseEntity<>(c, HttpStatus.OK);
+		
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/getAppointmentDetail")
 	public ResponseEntity<?> getAppointmentDetail(@RequestParam long id) {
