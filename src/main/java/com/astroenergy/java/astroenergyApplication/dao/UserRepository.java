@@ -10,9 +10,11 @@ import com.astroenergy.java.astroenergyApplication.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
-
+    User findByEmailAndDeletedAtIsNull(String email);
+    List<User> findByDeletedAtIsNullOrderByIdDesc();
     @Override
     void delete(User user);
     
+User findByIdAndDeletedAtIsNull(Long id);
 
 }

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +29,7 @@ import com.astroenergy.java.astroenergyApplication.dao.VerificationTokenReposito
 import com.astroenergy.java.astroenergyApplication.dto.UserDto;
 import com.astroenergy.java.astroenergyApplication.error.UserAlreadyExistException;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
+import com.astroenergy.java.astroenergyApplication.model.Blog;
 import com.astroenergy.java.astroenergyApplication.model.NewLocationToken;
 import com.astroenergy.java.astroenergyApplication.model.PasswordResetToken;
 import com.astroenergy.java.astroenergyApplication.model.Role;
@@ -99,6 +101,7 @@ public class UserService implements IUserService {
         user.setUsing2FA(accountDto.isUsing2FA());	
         	profile = new UserProfile();
         	profile.setEmail(accountDto.getEmail());
+            profile.setCountryCode(accountDto.getCountryCode());
         	profile.setFirstName(accountDto.getFirstName());
         	profile.setLastName(accountDto.getLastName());
         	role = roleRepository.findByName("ROLE_USER");
@@ -175,22 +178,22 @@ public class UserService implements IUserService {
         userRepository.save(user);
     }
 
-    @Override
-    public void deleteUser(final User user) {
-        final VerificationToken verificationToken = tokenRepository.findByUser(user);
-
-        if (verificationToken != null) {
-            tokenRepository.delete(verificationToken);
-        }
-
-        final PasswordResetToken passwordToken = passwordTokenRepository.findByUser(user);
-
-        if (passwordToken != null) {
-            passwordTokenRepository.delete(passwordToken);
-        }
-
-        userRepository.delete(user);
-    }
+//    @Override
+//    public void deleteUser(final User user) {
+//        final VerificationToken verificationToken = tokenRepository.findByUser(user);
+//
+//        if (verificationToken != null) {
+//            tokenRepository.delete(verificationToken);
+//        }
+//
+//        final PasswordResetToken passwordToken = passwordTokenRepository.findByUser(user);
+//
+//        if (passwordToken != null) {
+//            passwordTokenRepository.delete(passwordToken);
+//        }
+//
+//        userRepository.delete(user);
+//    }
 
     @Override
     public void createVerificationTokenForUser(final User user, final String token) {
@@ -215,7 +218,7 @@ public class UserService implements IUserService {
 
     @Override
     public User findUserByEmail(final String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailAndDeletedAtIsNull(email);
     }
 
     @Override
@@ -393,5 +396,16 @@ public class UserService implements IUserService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	public User deleteUser(Long id) throws Exception  {
+		try {
+			User u=userRepository.findByIdAndDeletedAtIsNull(id);
+			u.setStatus("DELETED");
+            u.setDeletedAt(new Date());
+			u.setEnabled(false);
+            return userRepository.save(u);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 }

@@ -35,6 +35,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.astroenergy.java.astroenergyApplication.jwt.AccountCredentials;
 import com.astroenergy.java.astroenergyApplication.jwt.JwtTokenUtil;
+import com.astroenergy.java.astroenergyApplication.model.Country;
 import com.astroenergy.java.astroenergyApplication.model.Feedback;
 import com.astroenergy.java.astroenergyApplication.model.Location;
 import com.astroenergy.java.astroenergyApplication.model.User;
@@ -85,11 +87,22 @@ public class UserController {
 	
 	@Autowired
 	private AWSS3Service awsService; 
+	
+	@DeleteMapping("/deleteUser/{id}")
+	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+		try {
+		User u= userService.deleteUser(id);
+		 return new ResponseEntity<>(u, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AccountCredentials authenticationRequest)
 			throws Exception {
-
+if(userService.findUserByEmail(authenticationRequest.getUsername())!=null) {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -109,7 +122,8 @@ public class UserController {
 		userMap.put("userName", userDetails.getUsername());
 		userMap.put("roles", roles);
 		userMap.put("enabled", user.isEnabled());
-		return ResponseEntity.ok(userMap);
+		return ResponseEntity.ok(userMap);}
+else { return new ResponseEntity<>("User deleted or not exists",HttpStatus.NOT_FOUND);}
 	}
 
 
@@ -154,7 +168,7 @@ public class UserController {
 		try {
 			profile = userProfileService.getUserProfile(userId);
 		} catch (Exception e) {
-			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting job profile="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting user profile="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<UserProfile>(profile,HttpStatus.OK);
 		
@@ -167,7 +181,7 @@ public class UserController {
 		try {
 			user = userProfileService.getUser(userId);
 		} catch (Exception e) {
-			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting job profile="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting user="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 		
@@ -180,7 +194,7 @@ public class UserController {
 		try {
 			users = userProfileService.getUsers();
 		} catch (Exception e) {
-			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting job profile="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting users="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<List<User>>(users,HttpStatus.OK);
 		

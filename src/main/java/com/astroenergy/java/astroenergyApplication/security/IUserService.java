@@ -22,8 +22,8 @@ public interface IUserService {
     User changeUserView(Long id,String viewed);
 
     void saveRegisteredUser(User user);
-
-    void deleteUser(User user);
+    User deleteUser(Long id) throws Exception;
+    //void deleteUser(User user);
 
     void createVerificationTokenForUser(User user, String token);
 

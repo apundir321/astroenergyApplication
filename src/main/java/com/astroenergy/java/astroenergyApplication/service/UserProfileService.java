@@ -129,20 +129,13 @@ public class UserProfileService {
 	public User getUser(String userId) throws Exception{
 		try {
 			
-			Optional<User> user = userRepository.findById(Long.parseLong(userId));
-			if(user.isPresent())
-			{
-				User savedUser = user.get();
-				if(savedUser==null)
-				{
-					throw new GenericException("No user found for this ID");
-				}
-				return savedUser;
+			User user = userRepository.findByIdAndDeletedAtIsNull(Long.parseLong(userId));
+			if(user!=null) {
+			return user;}
+			else {
+				throw new GenericException("User not found or may be deleted");
 			}
-			else
-			{
-				throw new GenericException("Didn't find any user by this Id");
-			}
+			
 			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -153,7 +146,7 @@ public class UserProfileService {
 	public List<User> getUsers() throws Exception{
 		try {
 			List<User> userList = new ArrayList<User>();
-			Iterable<User> users = userRepository.findAll();
+			Iterable<User> users = userRepository.findByDeletedAtIsNullOrderByIdDesc();
 			users.forEach(userList::add);
 			if(userList.size()>0)
 			{

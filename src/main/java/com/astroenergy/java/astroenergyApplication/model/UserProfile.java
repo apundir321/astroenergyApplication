@@ -8,6 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class UserProfile {
@@ -28,7 +33,36 @@ public class UserProfile {
 	
 	private String timeOfBirth;
 	private String country;
+	private String countryCode;
 	private String gender;
+	
+	@CreationTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date createdAt;
+	@UpdateTimestamp
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date updatedAt;
+	
+	private Date deletedAt;
+    
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
+	}
 	public int getId() {
 		return id;
 	}
@@ -42,6 +76,13 @@ public class UserProfile {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public String getCountryCode() {
+		return countryCode;
+	}
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 	public void setId(int id) {
 		this.id = id;

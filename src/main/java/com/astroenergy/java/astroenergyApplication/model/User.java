@@ -61,8 +61,16 @@ public class User {
 	private Date updatedAt;
 	
 	private Date deletedAt;
-    
-    @JsonIgnore
+    private String status;
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@JsonIgnore
     private String secret;
 
     //
