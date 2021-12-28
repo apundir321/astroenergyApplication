@@ -1,5 +1,6 @@
 package com.astroenergy.java.astroenergyApplication.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -180,6 +182,17 @@ public class AppointmentController {
 	public ResponseEntity<?> addRemedyAppointment(@RequestParam Long id,@RequestParam String remedy) {
 		try {
 			Appointment a= appointmentService.addRemedyAppointment(id,remedy);
+			 return new ResponseEntity<>(a, HttpStatus.OK);
+		
+		}catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@GetMapping("/updateAppointmentDate")
+	public ResponseEntity<?> updateAppointmentDate(@RequestParam Long id,@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+		try {
+			Appointment a= appointmentService.updateAppointmentDate(id,date);
 			 return new ResponseEntity<>(a, HttpStatus.OK);
 		
 		}catch (Exception e) {

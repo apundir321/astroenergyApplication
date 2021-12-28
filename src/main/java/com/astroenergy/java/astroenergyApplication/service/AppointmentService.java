@@ -105,7 +105,16 @@ public class AppointmentService {
 	 
 	
 	
-	
+	public Appointment updateAppointmentDate(Long id,Date date) throws Exception{
+		try {
+			Appointment a=appointMentRepo.findByIdAndDeletedAtIsNull(id);
+			a.setAppointDate(date);
+			return appointMentRepo.save(a);
+		}
+		catch(Exception e) {
+			throw e; 
+		}
+	}
 	public Appointment addAppointment(Appointment appointment,Long userProfileId)throws Exception
 	{
 		
