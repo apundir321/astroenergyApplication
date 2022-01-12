@@ -26,6 +26,16 @@ public Ratelist deleteRatelist(int id) throws Exception  {
 		throw e;
 	}
 }
+public int getRateByCountry(String country,String consult) {
+	try {
+		Ratelist r=rateListRepo.findByCountryNameAndConsultationTypeAndDeletedAtIsNull(country, consult);
+		int rate=r.getRateOfValues();
+		return rate;
+	}
+	catch(Exception e) {
+		throw e;
+	}
+}
 
 public Ratelist addRatelist(Ratelist rateList)throws Exception
 {
