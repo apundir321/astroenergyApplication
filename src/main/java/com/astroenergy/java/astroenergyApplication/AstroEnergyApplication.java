@@ -64,7 +64,7 @@ public class AstroEnergyApplication {
 		dayString.add("Monday");
 		dayString.add("TuesDay");
 		dayString.add("Wednesday");
-		dayString.add("Thrusday");
+		dayString.add("Thursday");
 		dayString.add("Friday");
 		dayString.add("Saturday");
 		dayString.add("Sunday");
