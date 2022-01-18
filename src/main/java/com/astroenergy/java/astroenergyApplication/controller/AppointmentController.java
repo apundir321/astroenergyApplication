@@ -66,8 +66,13 @@ public class AppointmentController {
 	public ResponseEntity<?> saveAppointment(@RequestBody Appointment appointment,@RequestParam Long userId,final HttpServletRequest request) {
 		try {
 			if(userId==0) {
-				   final User registered = userService.registerNewUserAccount(appointment);
-				   eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request),true));
+					User registered = userService.registerNewUserAccount(appointment);
+					if(registered!=null) {
+						eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request),true));
+					}else
+					{
+						registered = userService.findUserByEmail(appointment.getEmail());
+					}
 				   userId=registered.getId();
 				   Appointment a=appointmentService.addAppointment(appointment, userId);
 				   return new ResponseEntity<>(a, HttpStatus.OK);

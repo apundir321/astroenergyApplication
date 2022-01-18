@@ -119,7 +119,7 @@ public class UserService implements IUserService {
     }
     public User registerNewUserAccount(Appointment appointment) {
         if (emailExists(appointment.getEmail())) {
-            throw new UserAlreadyExistException("There is an account with that email address: " + appointment.getEmail());
+            return null;
         }
         Role role = null;
         UserProfile profile = null;
