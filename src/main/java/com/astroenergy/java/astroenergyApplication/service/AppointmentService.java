@@ -102,6 +102,15 @@ public class AppointmentService {
 			throw e;
 		}
 	}
+	
+	public Appointment updateAppointment(Appointment appointment)throws Exception
+	{
+		try {
+			return appointMentRepo.save(appointment);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	 
 	
 	

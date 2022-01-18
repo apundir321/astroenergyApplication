@@ -66,6 +66,9 @@ public class Appointment {
 	private String phoneNumber;
 	
 	private String status;
+	
+	private String orderId;
+	
 	@Lob
 	private String remedy;
 	
@@ -276,6 +279,14 @@ public class Appointment {
 
 	public void setTimeOfBirth(String timeOfBirth) {
 		this.timeOfBirth = timeOfBirth;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 	
 	
