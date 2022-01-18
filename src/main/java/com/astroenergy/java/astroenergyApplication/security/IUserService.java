@@ -32,6 +32,7 @@ public interface IUserService {
     VerificationToken generateNewVerificationToken(String token);
 
     void createPasswordResetTokenForUser(User user, String token);
+    User getUserByProfile(int profileId);
 
     User findUserByEmail(String email);
 

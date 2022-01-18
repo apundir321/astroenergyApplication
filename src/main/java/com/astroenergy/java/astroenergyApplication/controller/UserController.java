@@ -186,6 +186,18 @@ else { return new ResponseEntity<>("User deleted or not exists",HttpStatus.NOT_F
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 		
 	}
+	@RequestMapping(value = "/getUserByProfile", method = RequestMethod.GET)
+	public ResponseEntity<?> getUserByProfile(@RequestParam int profileId)
+			throws Exception {
+		User user = null;
+		try {
+			user = userService.getUserByProfile(profileId);
+		} catch (Exception e) {
+			return new ResponseEntity<GenericResponse>(new GenericResponse("Exception in getting user="+e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<User>(user,HttpStatus.OK);
+		
+	}
 	
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
 	public ResponseEntity<?> getUsers()

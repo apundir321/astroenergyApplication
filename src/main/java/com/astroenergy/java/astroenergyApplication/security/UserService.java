@@ -408,4 +408,13 @@ public class UserService implements IUserService {
 			throw e;
 		}
 	}
+	public User getUserByProfile(int profileId) {
+		try {
+			User u=userRepository.findByUserProfileIdAndDeletedAtIsNull(profileId);
+		   return u;
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
 }
