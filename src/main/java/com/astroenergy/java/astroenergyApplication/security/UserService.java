@@ -98,12 +98,14 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         user.setCountryCode(accountDto.getCountryCode());
+        user.setPhoneNo(accountDto.getPhoneNo());
         user.setUsing2FA(accountDto.isUsing2FA());	
         	profile = new UserProfile();
         	profile.setEmail(accountDto.getEmail());
             profile.setCountryCode(accountDto.getCountryCode());
         	profile.setFirstName(accountDto.getFirstName());
         	profile.setLastName(accountDto.getLastName());
+        	profile.setPhone(accountDto.getPhoneNo());
         	role = roleRepository.findByName("ROLE_USER");
         	if(role==null)
         	{

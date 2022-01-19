@@ -19,7 +19,7 @@ public class UserDto {
 
     @ValidPassword
     private String password;
-    
+    private String phoneNo;
     private String countryCode;
 
     @NotNull
@@ -59,11 +59,20 @@ public class UserDto {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
+
+	public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(final String lastName) {
+    public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
