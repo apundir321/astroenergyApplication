@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.astroenergy.java.astroenergyApplication.dao.UserRepository;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Country;
 import com.astroenergy.java.astroenergyApplication.model.SearchAppointment;
 import com.astroenergy.java.astroenergyApplication.model.User;
+import com.astroenergy.java.astroenergyApplication.registration.OnAppointmentBookedEvent;
 import com.astroenergy.java.astroenergyApplication.registration.OnRegistrationCompleteEvent;
 import com.astroenergy.java.astroenergyApplication.security.UserService;
 import com.astroenergy.java.astroenergyApplication.service.AppointmentService;
@@ -74,9 +76,12 @@ public class AppointmentController {
 						registered = userService.findUserByEmail(appointment.getEmail());
 					}
 				   userId=registered.getId();
+				   eventPublisher.publishEvent(new OnAppointmentBookedEvent(appointment,registered));
 				   Appointment a=appointmentService.addAppointment(appointment, userId);
 				   return new ResponseEntity<>(a, HttpStatus.OK);
 			}else {
+				User user=userService.getUserByID(userId).get();
+				eventPublisher.publishEvent(new OnAppointmentBookedEvent(appointment,user));
 		Appointment savedAppointment= appointmentService.addAppointment(appointment, userId);
 		 return new ResponseEntity<>(savedAppointment, HttpStatus.OK);}
 		}catch (Exception e) {

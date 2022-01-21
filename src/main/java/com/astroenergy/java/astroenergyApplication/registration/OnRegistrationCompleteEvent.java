@@ -12,14 +12,16 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
     private final String appUrl;
     private final Locale locale;
     private final User user;
-    private final boolean appointmentUser;
+    private final boolean appointmentNewUser;
+   
 
-    public OnRegistrationCompleteEvent(final User user, final Locale locale, final String appUrl,final boolean appointmentUser) {
+    public OnRegistrationCompleteEvent(final User user, final Locale locale, final String appUrl,final boolean appointmentNewUser) {
         super(user);
         this.user = user;
         this.locale = locale;
         this.appUrl = appUrl;
-        this.appointmentUser=appointmentUser;
+        this.appointmentNewUser=appointmentNewUser;
+  
     }
 
     //
@@ -36,9 +38,12 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
         return user;
     }
 
-	public boolean isAppointmentUser() {
-		return appointmentUser;
+	public boolean isAppointmentNewUser() {
+		return appointmentNewUser;
+	}
+
 	}
     
+    
 
-}
+
