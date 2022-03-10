@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootApplication
 public class AstroEnergyApplication {
 
+	
 	@Autowired
 	RoleRepository roleRepository;
 	
