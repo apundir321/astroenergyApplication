@@ -24,6 +24,7 @@ public class Enquiry {
 	private String mobile;
 	private String status;
 	private String viewed;
+	private String countryCode;
 	@CreationTimestamp
 	@Temporal(value=TemporalType.TIMESTAMP)
 	private Date createdAt;
@@ -40,6 +41,15 @@ public class Enquiry {
 	
 	public String getViewed() {
 		return viewed;
+	}
+	
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 
 	public void setViewed(String viewed) {
