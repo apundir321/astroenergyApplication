@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Day;
 import com.astroenergy.java.astroenergyApplication.model.Holiday;
@@ -50,6 +49,7 @@ public class HolidayController {
 		}
 		
 	}
+	
 	
 	@PostMapping("/editHoliday")
 	public ResponseEntity<?> editHoliday(@RequestBody Holiday holiday)
@@ -104,5 +104,6 @@ public class HolidayController {
 			return new ResponseEntity<String>("Error in adding timeslot", HttpStatus.INTERNAL_SERVER_ERROR);	
 		}	
 	}
+	
 
 }

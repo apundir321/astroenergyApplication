@@ -53,7 +53,7 @@ public interface IUserService {
     User updateUser2FA(boolean use2FA);
     
     public List<User> getUserByRoleName(String roleName)throws Exception;
-    
+    public String emailVerification(String token) throws Exception;
     
     
     public List<UserProfile> getUserProfilesByRoleParams(Map<String, Object> searchCriteria)throws Exception;

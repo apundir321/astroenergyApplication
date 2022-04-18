@@ -102,9 +102,10 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AccountCredentials authenticationRequest)
 			throws Exception {
-if(userService.findUserByEmail(authenticationRequest.getUsername())!=null) {
+		User savedUser=userService.findUserByEmail(authenticationRequest.getUsername());
+if(savedUser!=null) {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
+           if(savedUser.isEnabled()) {
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		List<String> roles = new ArrayList<>();
@@ -123,6 +124,9 @@ if(userService.findUserByEmail(authenticationRequest.getUsername())!=null) {
 		userMap.put("roles", roles);
 		userMap.put("enabled", user.isEnabled());
 		return ResponseEntity.ok(userMap);}
+           else{
+        	   throw new Exception("Email not verified.");
+           }}
 else { return new ResponseEntity<>("User deleted or not exists",HttpStatus.NOT_FOUND);}
 	}
 

@@ -132,7 +132,6 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(appointment.getEmail()));
         user.setEmail(appointment.getEmail());
         user.setCountryCode(appointment.getCountry());
-       user.setEnabled(true);
         	profile = new UserProfile();
         	profile.setEmail(appointment.getEmail());
         	profile.setFirstName(appointment.getName());
@@ -149,6 +148,22 @@ public class UserService implements IUserService {
         user.setRoles(roles);
         user.setUserProfile(profile);
         return userRepository.save(user);
+    }
+    public String emailVerification(String token) throws Exception {
+    	try {
+    	VerificationToken userToken=	tokenRepository.findByToken(token);
+    	if(userToken!=null && userToken.getExpiryDate().after(new Date())) {
+           User user=userToken.getUser();
+             user.setEnabled(true);
+           userRepository.save(user);
+           userToken.setExpiryDate(new Date());
+           return "Verified";
+    	}else{throw new Exception("Invalid or expired token");
+    		}
+    	}
+    	catch(Exception e) {
+    		throw e;
+    	}
     }
 
     @Override

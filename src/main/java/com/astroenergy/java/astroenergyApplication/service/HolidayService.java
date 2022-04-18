@@ -1,10 +1,13 @@
 package com.astroenergy.java.astroenergyApplication.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import com.astroenergy.java.astroenergyApplication.model.Holiday;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
 
 @Service
+@Transactional
 public class HolidayService {
 
 	@Autowired
@@ -34,6 +38,7 @@ public class HolidayService {
 			throw e;
 		}
 	}
+	
 
 	public Holiday saveHoliday(Holiday holiday) throws Exception {
 		try {

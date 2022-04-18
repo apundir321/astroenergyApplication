@@ -35,6 +35,12 @@ public class Holiday {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date holidayDate;
 	
+	@JsonFormat(pattern="yyyy-MM-dd")
+	private Date fromDate;
+	
+	@JsonFormat(pattern="yyyy-MM-dd")
+	private Date toDate;
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "holiday_timeslot", joinColumns = { @JoinColumn(name = "holiday_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "timeslot_id") })
@@ -100,6 +106,22 @@ public class Holiday {
 
 	public void setHolidayDate(Date holidayDate) {
 		this.holidayDate = holidayDate;
+	}
+
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Date getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
 
 

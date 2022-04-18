@@ -17,12 +17,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.social.support.URIBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.astroenergy.java.astroenergyApplication.dto.PasswordDto;
 import com.astroenergy.java.astroenergyApplication.dto.UserDto;
@@ -112,6 +114,17 @@ public class RegistrationRestController {
         } else {
             return new GenericResponse(messages.getMessage("auth.message.invalid", null, locale));
         }
+    }
+    @GetMapping("/user/emailVerification/")
+    public RedirectView emailVerification(@RequestParam String token) throws Exception {
+    	String result=userService.emailVerification(token);
+    if(result.equals("Verified")) {
+    	String pageUri=URIBuilder.fromUri("http://www.astroenergyindia.com.s3-website.us-east-2.amazonaws.com/verification").build().toString();
+    	return new RedirectView(pageUri);
+    }
+    else {
+    	throw new Exception("Invalid token");
+    }
     }
 
     // Change user password
