@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.astroenergy.java.astroenergyApplication.dao.AstroOrderRepository;
 import com.astroenergy.java.astroenergyApplication.model.AstroOrder;
+import com.astroenergy.java.astroenergyApplication.model.OrderRequest;
 import com.astroenergy.java.astroenergyApplication.model.Signature;
 
 @Service
@@ -17,9 +18,10 @@ public class OrderService {
     private AstroOrderRepository orderRepository;
  
     @Transactional
-    public AstroOrder saveOrder(final String razorpayOrderId, final Long userId) {
+    public AstroOrder saveOrder(OrderRequest orderRequest, final Long userId) {
     	AstroOrder order = new AstroOrder();
-        order.setRazorpayOrderId(razorpayOrderId);
+        order.setRazorpayOrderId(orderRequest.getOrderId());
+        order.setRazorpayPaymentId(orderRequest.getOrderId());
         order.setUserId(String.valueOf(userId));
         return orderRepository.save(order);
     }

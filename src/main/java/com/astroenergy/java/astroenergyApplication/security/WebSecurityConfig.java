@@ -37,7 +37,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // disable caching
         http.headers().cacheControl();
-
         http.cors().and().csrf().disable() // disable csrf for our requests.
         .authorizeRequests()
         .antMatchers("/").permitAll()

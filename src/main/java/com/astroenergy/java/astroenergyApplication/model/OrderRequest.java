@@ -5,8 +5,15 @@ public class OrderRequest {
 	    private String email;
 	    private String phoneNumber;
 	    private String amount;
+	    private String orderId;
 		public String getCustomerName() {
 			return customerName;
+		}
+		public String getOrderId() {
+			return orderId;
+		}
+		public void setOrderId(String orderId) {
+			this.orderId = orderId;
 		}
 		public void setCustomerName(String customerName) {
 			this.customerName = customerName;

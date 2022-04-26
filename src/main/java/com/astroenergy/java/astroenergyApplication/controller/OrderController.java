@@ -49,13 +49,13 @@ public class OrderController {
 		try {
 			// The transaction amount is expressed in the currency subunit, such
 			// as paise (in case of INR)
-			String amountInPaise = convertRupeeToPaise(orderRequest.getAmount());
+//			String amountInPaise = convertRupeeToPaise(orderRequest.getAmount());
 			// Create an order in RazorPay and get the order id
-			com.razorpay.Order order = createRazorPayOrder(amountInPaise);
-			razorPay = getOrderResponse((String) order.get("id"), amountInPaise);
+//			com.razorpay.Order order = createRazorPayOrder(amountInPaise);
+//			razorPay = getOrderResponse((String) order.get("id"), amountInPaise);
 			// Save order in the database
-			orderService.saveOrder(razorPay.getRazorpayOrderId(), Long.parseLong(userId));
-		} catch (RazorpayException e) {
+			orderService.saveOrder(orderRequest, Long.parseLong(userId));
+		} catch (Exception e) {
 			return new ResponseEntity<>(new ApiResponse(false, "Error while create payment order: " + e.getMessage()),
 					HttpStatus.EXPECTATION_FAILED);
 		}
