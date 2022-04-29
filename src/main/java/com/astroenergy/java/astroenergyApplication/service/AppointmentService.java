@@ -12,7 +12,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 
@@ -29,6 +34,7 @@ import com.astroenergy.java.astroenergyApplication.model.SearchEnquiry;
 import com.astroenergy.java.astroenergyApplication.model.TimeSlot;
 import com.astroenergy.java.astroenergyApplication.model.User;
 import com.astroenergy.java.astroenergyApplication.model.UserProfile;
+import com.astroenergy.java.astroenergyApplication.registration.OnAppointmentBookedEvent;
 import com.astroenergy.java.astroenergyApplication.security.UserService;
 
 
@@ -40,17 +46,19 @@ public class AppointmentService {
 	UserRepository userRepo;
 	@Autowired
 	AppointMentRepo appointMentRepo;
-	
+	 @Autowired
+	    private Environment env;
 	@Autowired
 	UserProfileRepository userProfileRepository;
-	
+    @Autowired
+    private JavaMailSender mailSender;
 	@Autowired
 	TimeSlotRepo timeSlotRepo; 
 	@Autowired 
 	UserService userService;
 	@PersistenceContext
 	EntityManager em;
-	
+	final static private Logger log=LogManager.getLogger(AppointmentService.class);
 	public Appointment appointmentViewed(Long id,String viewed) {
 		try {
 			Appointment a=appointMentRepo.findByIdAndDeletedAtIsNull(id);
@@ -285,11 +293,39 @@ public class AppointmentService {
 		try {
 			Appointment a=appointMentRepo.findById(id).get();
 			a.setRemedy(remedy);
-			return appointMentRepo.save(a);
+			Appointment savedAppointmnet=appointMentRepo.save(a);
+			log.info("Remedy updated for appointment id: "+a.getId());
+		SimpleMailMessage mail=	sendNotificationToUserForRemedy(savedAppointmnet);
+		mailSender.send(mail);
+		log.info("Sending mail to user for remedy--End");
+		return savedAppointmnet;
 		}
 		catch(Exception e) {
+			log.error("Error occured while updating remedy"+e.getMessage());
 			throw e;
 		}
 	}
+	
+	final SimpleMailMessage sendNotificationToUserForRemedy(final Appointment appointment) {
+		try {
+			log.info("Sending mail to user for remedy--Start");
+		 final String recipientAddress=appointment.getUserProfile().getEmail();
+		 final String subject="Remedy updated";
+		 final String message="Remedy updated for \r\n Name: "+appointment.getName()+
+				               "\r\n Appointment date: "+appointment.getAppointDate()+
+				               "\r\n Consultation type: "+appointment.getConsultationType()+
+		                       "\r\n Remedy: "+appointment.getRemedy();
+		 final SimpleMailMessage email=new SimpleMailMessage();
+		 email.setTo(recipientAddress);
+		 email.setSubject(subject);
+		 email.setFrom(env.getProperty("support.email"));
+		 email.setText(message);
+		 return email;
+		 
+	 }
+		catch(Exception e) {
+			log.error("Error occured while sending mail for remedy"+e.getMessage());
+			throw e;}
+		}
 
 }
