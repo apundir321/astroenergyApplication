@@ -9,7 +9,7 @@ import com.astroenergy.java.astroenergyApplication.model.UserProfile;
 public interface AWSS3Service {
 
 	void uploadFile(MultipartFile multipartFile,String userId)  throws Exception;
-	
+	public String uploadCommonFile(final MultipartFile multipartFile) throws Exception;
 	void uploadGenericFile(MultipartFile multipartFile)  throws Exception;
 	
 	public ByteArrayOutputStream downloadFile(String keyName,UserProfile profile);

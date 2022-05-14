@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
@@ -37,7 +40,7 @@ public class AWSS3ServiceImpl implements AWSS3Service {
 	private AmazonS3 amazonS3;
 	@Value("${aws.s3.bucket}")
 	private String bucketName;
-	
+	private final String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
 	@Autowired
 	private UserRepository userRepository;
 
@@ -58,6 +61,13 @@ public class AWSS3ServiceImpl implements AWSS3Service {
 		}
 	}
 	
+	public String uploadCommonFile(final MultipartFile multipartFile) throws Exception{
+		final File file = convertMultiPartFileToFile(multipartFile);
+		URL imageUrl = uploadCommonImageToS3(bucketName,file);
+		LOGGER.info("File upload is completed.");
+		file.delete();
+		return imageUrl.toString();
+	}
 	@Async
 	public void uploadGenericFile(final MultipartFile multipartFile) throws Exception {
 		LOGGER.info("File upload in progress.");
@@ -92,8 +102,21 @@ public class AWSS3ServiceImpl implements AWSS3Service {
 	
 	
 }
-
-	
+	private URL uploadCommonImageToS3(final String bucketName,final File file){
+		final String fileName = "AstroCommon/"+generateRandomAlphaNumeric(9)+"_"+file.getName();
+		LOGGER.info("Uploading file with name= " + fileName);
+		final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead);
+		amazonS3.putObject(putObjectRequest);
+		URL imageUrl = amazonS3.getUrl(bucketName, fileName);
+		return imageUrl;
+	}
+	 public String generateRandomAlphaNumeric(int length) {
+	        Random rnd = new Random();
+	        StringBuilder sb = new StringBuilder(length);
+	        for (int i = 0; i < length; i++)
+	            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+	        return sb.toString();
+	    }
 	private void uploadGenericFileToS3Bucket(final String bucketName, final File file)throws Exception {
 		
 			final String uniqueFileName = file.getName();
