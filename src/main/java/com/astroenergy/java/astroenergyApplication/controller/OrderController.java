@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.astroenergy.java.astroenergyApplication.config.RazorPayClientConfig;
 import com.astroenergy.java.astroenergyApplication.model.ApiResponse;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
+import com.astroenergy.java.astroenergyApplication.model.AstroOrder;
 import com.astroenergy.java.astroenergyApplication.model.OrderRequest;
 import com.astroenergy.java.astroenergyApplication.model.OrderResponse;
 import com.astroenergy.java.astroenergyApplication.model.PaymentResponse;
@@ -44,7 +45,7 @@ public class OrderController {
 	}
 
 	@PostMapping("/order")
-	public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, @RequestParam String userId) {
+	public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, @RequestParam String userId,@RequestParam String appointmentId) {
 		OrderResponse razorPay = null;
 		try {
 			// The transaction amount is expressed in the currency subunit, such
@@ -54,12 +55,16 @@ public class OrderController {
 //			com.razorpay.Order order = createRazorPayOrder(amountInPaise);
 //			razorPay = getOrderResponse((String) order.get("id"), amountInPaise);
 			// Save order in the database
-			orderService.saveOrder(orderRequest, Long.parseLong(userId));
+			AstroOrder order = orderService.saveOrder(orderRequest, Long.parseLong(userId));
+			Appointment savedAppointment =  appointmentService.getAppointMentDetail(Long.parseLong(appointmentId));
+			savedAppointment.setStatus("PAYMENT_PAID");
+			savedAppointment.setOrderId(orderRequest.getOrderId());
+			appointmentService.updateAppointment(savedAppointment);
+			return ResponseEntity.ok(new ApiResponse(true, order.getRazorpayPaymentId()));
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ApiResponse(false, "Error while create payment order: " + e.getMessage()),
 					HttpStatus.EXPECTATION_FAILED);
 		}
-		return ResponseEntity.ok(razorPay);
 	}
 
 	@PutMapping("/order")
