@@ -189,7 +189,7 @@ public class AppointmentController {
 		}
 	}
 	
-	@GetMapping("/addRemedyAppointment")
+	@PostMapping("/addRemedyAppointment")
 	public ResponseEntity<?> addRemedyAppointment(@RequestBody AppointmentDto appointmentDto) {
 		try {
 			Appointment a= appointmentService.addRemedyAppointment(appointmentDto.getId(),appointmentDto.getRemedy());
