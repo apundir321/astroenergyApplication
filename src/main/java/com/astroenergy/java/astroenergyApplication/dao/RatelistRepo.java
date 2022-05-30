@@ -11,5 +11,5 @@ import com.astroenergy.java.astroenergyApplication.model.Ratelist;
 public interface RatelistRepo extends JpaRepository<Ratelist,Integer> {
 Ratelist findBySnoAndDeletedAtIsNull(int id);
 List<Ratelist> findByDeletedAtIsNullOrderBySnoDesc();
-Ratelist findByCountryNameAndConsultationTypeAndDeletedAtIsNull(String country,String consult);
+List<Ratelist> findByCountryNameAndConsultationTypeAndDeletedAtIsNull(String country,String consult);
 }
