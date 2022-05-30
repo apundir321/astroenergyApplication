@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.astroenergy.java.astroenergyApplication.dao.UserRepository;
+import com.astroenergy.java.astroenergyApplication.dto.AppointmentDto;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
 import com.astroenergy.java.astroenergyApplication.model.Country;
 import com.astroenergy.java.astroenergyApplication.model.SearchAppointment;
@@ -188,10 +189,10 @@ public class AppointmentController {
 		}
 	}
 	
-	@GetMapping("/addRemedyAppointment")
-	public ResponseEntity<?> addRemedyAppointment(@RequestParam Long id,@RequestParam String remedy) {
+	@PostMapping("/addRemedyAppointment")
+	public ResponseEntity<?> addRemedyAppointment(@RequestBody AppointmentDto appointmentDto) {
 		try {
-			Appointment a= appointmentService.addRemedyAppointment(id,remedy);
+			Appointment a= appointmentService.addRemedyAppointment(appointmentDto.getId(),appointmentDto.getRemedy());
 			 return new ResponseEntity<>(a, HttpStatus.OK);
 		
 		}catch (Exception e) {
