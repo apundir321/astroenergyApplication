@@ -504,6 +504,10 @@ public class UserService implements IUserService {
 //    			log.error("key cannot be null");
 //    			throw new Exception("Key cannot be null");
 //    		}
+    		if(passwordDto.getToken()==null || passwordDto.getNewPassword()==null) {
+    			log.error("token or new password field could not be null");
+    			throw new Exception("token or new password field could not be null");
+    		}
     		User user=userRepository.findByForgotPasswordKey(passwordDto.getToken());
     		if(user==null) {
 			log.error("Provided key doesn't match with any user or key might be null");
