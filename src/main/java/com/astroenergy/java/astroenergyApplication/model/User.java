@@ -40,6 +40,8 @@ public class User {
     private String email;
     private String countryCode;
     private String phoneNo;
+    @Column(unique=true)
+    private String forgotPasswordKey;
 
     @JsonIgnore
     @Column(length = 60)
@@ -90,7 +92,15 @@ public class User {
     }
     
 
-    public Date getCreatedAt() {
+    public String getForgotPasswordKey() {
+		return forgotPasswordKey;
+	}
+
+	public void setForgotPasswordKey(String forgotPasswordKey) {
+		this.forgotPasswordKey = forgotPasswordKey;
+	}
+
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 

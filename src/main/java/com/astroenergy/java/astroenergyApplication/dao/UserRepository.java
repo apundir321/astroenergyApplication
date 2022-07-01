@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
 User findByIdAndDeletedAtIsNull(Long id);
 User findByUserProfileIdAndDeletedAtIsNull(int id);
+User findByForgotPasswordKey(String token);
 }

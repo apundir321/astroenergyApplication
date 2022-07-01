@@ -8,12 +8,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +32,7 @@ import com.astroenergy.java.astroenergyApplication.dao.RoleRepository;
 import com.astroenergy.java.astroenergyApplication.dao.UserLocationRepository;
 import com.astroenergy.java.astroenergyApplication.dao.UserRepository;
 import com.astroenergy.java.astroenergyApplication.dao.VerificationTokenRepository;
+import com.astroenergy.java.astroenergyApplication.dto.PasswordDto;
 import com.astroenergy.java.astroenergyApplication.dto.UserDto;
 import com.astroenergy.java.astroenergyApplication.error.UserAlreadyExistException;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
@@ -37,6 +44,7 @@ import com.astroenergy.java.astroenergyApplication.model.User;
 import com.astroenergy.java.astroenergyApplication.model.UserLocation;
 import com.astroenergy.java.astroenergyApplication.model.UserProfile;
 import com.astroenergy.java.astroenergyApplication.model.VerificationToken;
+
 
 @Service
 @Transactional
@@ -70,9 +78,20 @@ public class UserService implements IUserService {
     @Autowired
     private NewLocationTokenRepository newLocationTokenRepository;
     
+    @Autowired
+    private JavaMailSender mailSender;
+    private final String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     @Autowired
     private Environment env;
+    
+    @Value("${spring.mail.forgotPasswordUrl}")
+    private String forgotPasswordUrl;
+    
+    @Value("${spring.mail.username}")
+    private String fromMail;
+    
+    private static final Logger log= LogManager.getLogger(UserService.class);
 
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
@@ -434,4 +453,70 @@ public class UserService implements IUserService {
 			throw e;
 		}
 	}
+	
+	@Override
+	public void sendMailForForgotPasswordToUser(String email) throws Exception{
+		try {
+		User user=userRepository.findByEmail(email);
+		if(user!=null) {
+			String token=generateRandomAlphaNumeric(9);
+			user.setForgotPasswordKey(token);
+			SimpleMailMessage mail=createMailForForgotPassword(user.getEmail(),token);
+			mailSender.send(mail);
+		}
+		else {
+			throw new Exception("User doesn't exists with this email address or forgot request already made");
+		}
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	public SimpleMailMessage createMailForForgotPassword(String email,String token) {
+		try {
+			String subject="Reset Password";
+			String message="Please click on the below link to reset the password for your Astro Energy account \r\n \r\n";
+		    String resetLink=forgotPasswordUrl+"?key="+token;
+		    SimpleMailMessage mail=new SimpleMailMessage();
+		    mail.setFrom(fromMail);
+		    mail.setTo(email);
+		    mail.setSubject(subject);
+		    mail.setText(message+resetLink);
+		    return mail;
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
+    public String generateRandomAlphaNumeric(int length) {
+        Random rnd = new Random();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++)
+            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        return sb.toString();
+    }
+    
+    @Override
+    public String resetUserPassword(PasswordDto passwordDto) throws Exception{
+    	try {
+//    		if(passwordDto.getToken()==null) {
+//    			log.error("key cannot be null");
+//    			throw new Exception("Key cannot be null");
+//    		}
+    		User user=userRepository.findByForgotPasswordKey(passwordDto.getToken());
+    		if(user==null) {
+			log.error("Provided key doesn't match with any user or key might be null");
+    			throw new Exception("Provided key doesn't match with any user or key might be null");
+    		}
+    		user.setForgotPasswordKey(null);
+    		changeUserPassword(user,passwordDto.getNewPassword());
+    		return "Password changed successfully";
+    		
+    		
+    	}
+    	catch(Exception e) {
+    		throw e;
+    	}
+    }
 }

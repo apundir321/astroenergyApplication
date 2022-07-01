@@ -11,6 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -36,7 +38,7 @@ EnquiryRepo enquiryRepo;
 
 @Autowired
 ContactRepo contactRepo;
-
+private static final Logger log=LogManager.getLogger(EnquiryService.class);
 public Enquiry deleteEnquiry(int id) throws Exception  {
 	try {
 		Enquiry a=enquiryRepo.findBySnoAndDeletedAtIsNull(id);
@@ -155,6 +157,22 @@ public Contact addContact(Contact contact) {
 			// TODO: handle exception
 		}
 		return null;
+	}
+	
+	public List<Enquiry> deleteAllEnquiries() {
+		try {
+			log.info("Getting stored enquiries...Start");
+			List<Enquiry> storedEnquiries=enquiryRepo.findByDeletedAtIsNullOrderBySnoDesc();
+			log.info("Getting stored enquiries...End");
+			storedEnquiries.forEach(enquiry->{
+				enquiry.setDeletedAt(new Date());
+				enquiryRepo.save(enquiry);
+			});
+		return storedEnquiries;
+		}
+		catch(Exception e) {
+			throw e;
+		}
 	}
 
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.astroenergy.java.astroenergyApplication.dto.PasswordDto;
 import com.astroenergy.java.astroenergyApplication.dto.UserDto;
 import com.astroenergy.java.astroenergyApplication.error.UserAlreadyExistException;
 import com.astroenergy.java.astroenergyApplication.model.Appointment;
@@ -65,6 +66,8 @@ public interface IUserService {
     String isValidNewLocationToken(String token);
     
     public User getRecruiter(String recruiterProfileId);
+    public void sendMailForForgotPasswordToUser(String email) throws Exception;
+    public String resetUserPassword(PasswordDto passwordDto) throws Exception;
 
 //    void addUserLocation(User user, String ip);
 }
