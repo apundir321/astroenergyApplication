@@ -26,11 +26,18 @@ public Ratelist deleteRatelist(int id) throws Exception  {
 		throw e;
 	}
 }
-public int getRateByCountry(String country,String consult) {
+public int getRateByCountry(String country,String consult) throws Exception {
 	try {
-		Ratelist r=rateListRepo.findByCountryNameAndConsultationTypeAndDeletedAtIsNull(country, consult);
-		int rate=r.getRateOfValues();
-		return rate;
+		List<Ratelist> rateList=rateListRepo.findByCountryNameAndConsultationTypeAndDeletedAtIsNull(country, consult);
+		if(rateList.size()>0)
+		{
+			int rate=rateList.get(0).getRateOfValues();
+			return rate;
+		}
+		else{
+			throw new Exception("Rate Not found by this category");
+		}
+		
 	}
 	catch(Exception e) {
 		throw e;
